@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
+        rigidbody.velocity = Vector3.zero;
         rigidbody.MovePosition(
             transform.position +
             new Vector3(

@@ -4,6 +4,9 @@ using System.Collections;
 public class SpawnerLogic : MonoBehaviour {
     private static int enemiesToSpawn = 20;
     private static float timeToSpawn = .25f;
+    private float damage;
+    private float speed;
+    private Color color;
     private bool finishedSpawning = false;
     private int enemiesSpawned = 0;
     [SerializeField]
@@ -35,7 +38,10 @@ public class SpawnerLogic : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
+    public void Init (Color color, float damage, float speed) {
+        this.damage = damage;
+        this.speed = speed;
+        this.color = color;
         StartCoroutine("Spawn");
 	}
 
@@ -47,6 +53,7 @@ public class SpawnerLogic : MonoBehaviour {
                 --GameControl.LevelEnemiesLeftToSpawn;
                 GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity) as GameObject;
                 enemy.name = "Enemy #" + GameControl.LevelEnemiesLeftToSpawn;
+                enemy.GetComponent<EnemyLogic>().Init(color, damage, speed);
                 ++enemiesSpawned;
                 finishedSpawning = enemiesSpawned == enemiesToSpawn;
             }

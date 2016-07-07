@@ -2,17 +2,24 @@
 using System.Collections;
 
 public class EnemyLogic : MonoBehaviour {
+    [SerializeField]
     private NavMeshAgent navMeshAgent;
     private Vector3 prevPlayerPos;
     private bool isGameOver = false;
     private float damage = 5f;
     [SerializeField]
     GameObject pointPrefab;
+    [SerializeField]
+    MeshRenderer meshRenderer;
     private int scoreWorth = 5;
-	// Use this for initialization
-	void Start () {
+	
+	public void Init (Color color, float damage, float speed) {
+        this.damage = damage;
+        meshRenderer.material.color = color;
+        navMeshAgent.speed = speed;
+        //hardcoded because i can
+        navMeshAgent.acceleration = speed / 1.1f;
         prevPlayerPos = PlayerMovement.Pos;
-        navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.SetDestination(prevPlayerPos);
     }
 
@@ -44,7 +51,7 @@ public class EnemyLogic : MonoBehaviour {
     }
 
     void Kill(Vector3 explosionPos) {
-        ++GameControl.EnemiesKilledThisLevel;
+        ++GameControl.LevelEnemiesKilled;
         GameControl.CurrentScore += scoreWorth;
         //hardcoded because i can
         for (int i = -1; i < 2; i++)
