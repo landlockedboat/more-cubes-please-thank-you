@@ -76,7 +76,7 @@ public class EventManager : MonoBehaviour
     }
 
     public enum EventType {
-        OnBulletKill, OnLevelChanged, OnGameOver
+        OnBulletKill, OnLevelChanged, OnGameOver, OnScoreChanged
     }
 
 }

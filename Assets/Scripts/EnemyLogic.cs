@@ -6,6 +6,9 @@ public class EnemyLogic : MonoBehaviour {
     private Vector3 prevPlayerPos;
     private bool isGameOver = false;
     private float damage = 5f;
+    [SerializeField]
+    GameObject pointPrefab;
+    private int scoreWorth = 5;
 	// Use this for initialization
 	void Start () {
         prevPlayerPos = PlayerMovement.Pos;
@@ -30,18 +33,40 @@ public class EnemyLogic : MonoBehaviour {
         if (col.gameObject.tag == "Bullet")
         {
             Destroy(col.gameObject);
-            Kill();
+            Kill(col.transform.position);
         }
         if(col.gameObject.tag == "Player")
         {
             col.GetComponent<PlayerHealth>().Hurt(damage);
-            Kill();
+            Kill(col.transform.position);
         }
 
     }
 
-    void Kill() {
+    void Kill(Vector3 explosionPos) {
         ++GameControl.EnemiesKilledThisLevel;
+        GameControl.CurrentScore += scoreWorth;
+        //hardcoded because i can
+        for (int i = -1; i < 2; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                for (int k = -1; k < 2; k++)
+                {
+                    if (OptimisationControl.CurrentPointsInScene < OptimisationControl.MaxPointsInScene)
+                    {
+                        ++OptimisationControl.CurrentPointsInScene;
+                        GameObject point =
+                    Instantiate(pointPrefab,
+                        transform.position + new Vector3(i * .5f, j * .5f, k * .5f),
+                        transform.localRotation) as GameObject;
+                        point.GetComponent<PointLogic>().Init(explosionPos);
+                    }
+
+                }
+            }
+                            
+        }
         Destroy(gameObject);
     }
 

@@ -5,8 +5,32 @@ public class OptimisationControl : MonoBehaviour {
     [SerializeField]
     private float timeToKillBullets = 2f;
     private float currentTimeToKillBullets;
-	// Use this for initialization
-	void Start () {
+    private static float maxPointsInScene = 200;
+    private static float currentPointsInScene = 0;
+
+    public static float MaxPointsInScene
+    {
+        get
+        {
+            return maxPointsInScene;
+        }
+    }
+
+    public static float CurrentPointsInScene
+    {
+        get
+        {
+            return currentPointsInScene;
+        }
+
+        set
+        {
+            currentPointsInScene = value;
+        }
+    }
+
+    // Use this for initialization
+    void Start () {
         currentTimeToKillBullets = timeToKillBullets;
     }
 	

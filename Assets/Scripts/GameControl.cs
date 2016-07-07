@@ -6,6 +6,7 @@ public class GameControl : MonoBehaviour {
     int mapWidth;
     [SerializeField]
     int mapHeight;
+    private static int currentScore = 0;
     private static int levelEnemiesLeftToSpawn;
     private static int levelEnemiesToSpawn;
     private static int enemiesKilledThisLevel;
@@ -57,6 +58,20 @@ public class GameControl : MonoBehaviour {
         set
         {
             levelEnemiesLeftToSpawn = value;
+        }
+    }
+
+    public static int CurrentScore
+    {
+        get
+        {
+            return currentScore;
+        }
+
+        set
+        {
+            currentScore = value;
+            EventManager.TriggerEvent(EventManager.EventType.OnScoreChanged);
         }
     }
 
