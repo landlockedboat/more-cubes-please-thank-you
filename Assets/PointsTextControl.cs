@@ -4,26 +4,28 @@ using System.Collections;
 
 public class PointsTextControl : MonoBehaviour
 {
-    Text pointsText;
+    Text scoreText;
 
     void Start()
     {
-        pointsText = GetComponent<Text>();
-        UpdatePointsText();
+        scoreText = GetComponent<Text>();
+        UpdateScoreText();
     }
 
     void OnEnable()
     {
-        EventManager.StartListening(EventManager.EventType.OnScoreChanged, UpdatePointsText);
+        EventManager.StartListening(EventManager.EventType.OnScoreChanged, UpdateScoreText);
+        EventManager.StartListening(EventManager.EventType.OnMultiplierChanged, UpdateScoreText);
     }
 
     void OnDisable()
     {
-        EventManager.StopListening(EventManager.EventType.OnScoreChanged, UpdatePointsText);
+        EventManager.StopListening(EventManager.EventType.OnScoreChanged, UpdateScoreText);
+        EventManager.StopListening(EventManager.EventType.OnMultiplierChanged, UpdateScoreText);
     }
 
-    void UpdatePointsText()
+    void UpdateScoreText()
     {
-        pointsText.text = GameControl.CurrentScore.ToString();
+        scoreText.text = GameControl.CurrentScore.ToString() + " x" + GameControl.CurrentMultiplier;
     }
 }

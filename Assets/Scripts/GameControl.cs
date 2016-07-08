@@ -3,52 +3,90 @@ using System.Collections;
 
 public class GameControl : MonoBehaviour
 {
-
     [SerializeField]
-    int mapWidth;
+    float mapWidth;
     [SerializeField]
-    int mapHeight;
-
+    float mapHeight;
     [SerializeField]
-    //Color[] levelColors;
-    static float levelMaxDeltaHue = .1f;
-    static float currentHue = .5f;
-    [SerializeField]
-    static int levelsPerColor = 1;
+    float levelDeltaHue = .01f;    
+    float currentHue = .5f;
     //Look @ Start() for reference
-    static Color currentColor = Color.green;
+    Color currentColor = Color.green;
 
-    private static int currentScore = 0;
+    private int currentScore = 0;
+    private int currentMultiplier = 0;
+    /// <summary>
+    /// The time it takes to the multiplier to go down by one
+    /// </summary>
+    [SerializeField]
+    float multiplierTime = 1;
+    float currentMultiplierTime;
+    /// <summary>
+    /// The ammount of time it is deduced from multiplierTime when the multiplier increases by one.
+    /// </summary>
+    [SerializeField]
+    float deltaMultiplierTime = .01f;
 
-    private static int levelEnemiesLeftToSpawn;
-    private static int levelEnemiesToSpawn;
-    private static int levelEnemiesKilled;
-    private static int levelEnemyMinimumDamage;
-    private static int levelEnemyMinimumSpeed;
-    private static int levelEnemyMaximumDamage;
-    private static int levelEnemyMaximumSpeed;
+    int levelEnemiesLeftToSpawn;
+    int levelEnemiesToSpawn;
+    int levelEnemiesKilled;
+    int levelEnemyMinimumDamage;
+    int levelEnemyMinimumSpeed;
+    int levelEnemyMaximumDamage;
+    int levelEnemyMaximumSpeed;
 
-    static bool finishedSpawning = false;
+    [SerializeField]
+    int levelsUntilUpgrade = 5;
+
+    bool finishedSpawning = false;
     [SerializeField]
     private GameObject spawnerPrefab;
     [SerializeField]
     private float timeBetweenSpawners = 1f;
+    [SerializeField]
+    private int currentLevel = 1;
 
-    private static int currentLevel = 1;
+    private static GameControl gameControl;
 
+    public static GameControl instance
+    {
+        get
+        {
+            if (!gameControl)
+            {
+                gameControl = FindObjectOfType<GameControl>();
+                if (!gameControl)
+                {
+                    Debug.LogError("There needs to be one active GameControl script on a GameObject in your scene.");
+                }
+                else
+                {
+                    gameControl.Init();
+                }
+            }
 
+            return gameControl;
+        }
+    }
+
+    void Init()
+    {
+        LevelChanged();
+        StartCoroutine("InitSpawners");
+        StartCoroutine("InitMultiplier");
+    }
 
     public static int CurrentLevel
     {
         get
         {
-            return currentLevel;
+            return instance.currentLevel;
         }
 
         set
         {
-            currentLevel = value;
-            LevelChanged();
+            instance.currentLevel = value;
+            instance.LevelChanged();
             EventManager.TriggerEvent(EventManager.EventType.OnLevelChanged);
 
         }
@@ -58,13 +96,15 @@ public class GameControl : MonoBehaviour
     {
         get
         {
-            return levelEnemiesKilled;
+            return instance.levelEnemiesKilled;
         }
 
         set
         {
-            levelEnemiesKilled = value;
-            if (levelEnemiesKilled >= levelEnemiesToSpawn)
+            if (value > LevelEnemiesKilled)
+                IncrementMultiplier();
+            instance.levelEnemiesKilled = value;            
+            if (instance.levelEnemiesKilled >= instance.levelEnemiesToSpawn)
                 ++CurrentLevel;
         }
     }
@@ -73,12 +113,12 @@ public class GameControl : MonoBehaviour
     {
         get
         {
-            return levelEnemiesLeftToSpawn;
+            return instance.levelEnemiesLeftToSpawn;
         }
 
         set
         {
-            levelEnemiesLeftToSpawn = value;
+            instance.levelEnemiesLeftToSpawn = value;
         }
     }
 
@@ -86,62 +126,100 @@ public class GameControl : MonoBehaviour
     {
         get
         {
-            return currentScore;
+            return instance.currentScore;
         }
 
         set
         {
-            currentScore = value;
+            int deltaScore = value - instance.currentScore;
+            deltaScore *= CurrentMultiplier;
+            instance.currentScore = instance.currentScore + deltaScore;
             EventManager.TriggerEvent(EventManager.EventType.OnScoreChanged);
         }
     }
 
-    static void LevelChanged()
+    public static void IncrementMultiplier() {
+        ++instance.currentMultiplier;
+        instance.multiplierTime -= instance.deltaMultiplierTime;
+        instance.currentMultiplierTime = instance.multiplierTime;
+        EventManager.TriggerEvent(EventManager.EventType.OnMultiplierChanged);
+    }
+
+    public static void DecrementMultiplier()
     {
-        levelEnemiesToSpawn = CalculateEnemiesToSpawn();
-        levelEnemiesLeftToSpawn = levelEnemiesToSpawn;
-        SpawnerLogic.EnemiesToSpawn = CalculateSpawnerEnemies();
-        if (currentLevel % levelsPerColor == 0)
+        --instance.currentMultiplier;
+        instance.multiplierTime += instance.deltaMultiplierTime;
+        instance.currentMultiplierTime = instance.multiplierTime;
+        EventManager.TriggerEvent(EventManager.EventType.OnMultiplierChanged);
+    }
+
+    public static int CurrentMultiplier
+    {
+        get
         {
-            currentHue += levelMaxDeltaHue;
-            currentColor = Color.HSVToRGB(currentHue, 1, 1);
+            return instance.currentMultiplier;
         }
-        levelEnemiesKilled = 0;
+    }
+
+
+    public static float MapWidth
+    {
+        get
+        {
+            return instance.mapWidth;
+        }
+
+        set
+        {
+            instance.mapWidth = value;
+        }
+    }
+
+    public static float MapHeight
+    {
+        get
+        {
+            return instance.mapHeight;
+        }
+
+        set
+        {
+            instance.mapHeight = value;
+        }
+    }
+
+    void LevelChanged()
+    {
+        instance.levelEnemiesToSpawn = CalculateEnemiesToSpawn();
+        instance.levelEnemiesLeftToSpawn = instance.levelEnemiesToSpawn;
+        SpawnerLogic.EnemiesToSpawn = CalculateSpawnerEnemies();
+        currentHue += levelDeltaHue;
+        if (currentHue >= 1)
+            currentHue = 0;
+        currentColor = Color.HSVToRGB(currentHue, 1, 1);
+        CameraController.IsGrowing = true;
+        instance.levelEnemiesKilled = 0;
         CalculateDamages();
         finishedSpawning = false;
     }
 
-    static void CalculateDamages()
+    void CalculateDamages()
     {
-        levelEnemyMinimumSpeed = 5 + currentLevel/2;
-        levelEnemyMaximumSpeed = 10 + currentLevel / 2;
+        instance.levelEnemyMinimumSpeed = 5 + currentLevel/2;
+        instance.levelEnemyMaximumSpeed = 10 + currentLevel / 2;
 
-        levelEnemyMinimumDamage = currentLevel;
-        levelEnemyMaximumDamage = 5 + currentLevel;
+        instance.levelEnemyMinimumDamage = currentLevel;
+        instance.levelEnemyMaximumDamage = 5 + currentLevel;
     }
 
-    static int CalculateSpawnerEnemies()
+    int CalculateSpawnerEnemies()
     {
         return currentLevel * 5;
     }
 
-    static int CalculateEnemiesToSpawn()
+    int CalculateEnemiesToSpawn()
     {
         return 10 + currentLevel * 5;
-    }
-
-    // Use this for initialization
-    void Start()
-    {
-        LevelChanged();
-        StartCoroutine("InitSpawners");
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     IEnumerator InitSpawners()
@@ -163,7 +241,7 @@ public class GameControl : MonoBehaviour
                     ) as GameObject;
                 float enemyPower = Random.value;
                 spawner.GetComponent<SpawnerLogic>().Init(
-                    Color.Lerp(currentColor, Color.HSVToRGB(currentHue + levelMaxDeltaHue, 1, 1), enemyPower),
+                    Color.Lerp(currentColor, Color.HSVToRGB(currentHue + levelDeltaHue, 1, 1), enemyPower),
                     levelEnemyMinimumDamage + levelEnemyMaximumDamage * enemyPower,
                     levelEnemyMinimumSpeed + levelEnemyMaximumSpeed * enemyPower);
                 potentialEnemies -= SpawnerLogic.EnemiesToSpawn;
@@ -173,6 +251,22 @@ public class GameControl : MonoBehaviour
                 }
                    
                 yield return new WaitForSeconds(timeBetweenSpawners);
+            }
+            yield return null;
+        }
+
+    }
+
+    IEnumerator InitMultiplier() {
+        while (true)
+        {
+            if(currentMultiplier > 0)
+            {
+                currentMultiplierTime -= deltaMultiplierTime;
+                if (currentMultiplierTime <= 0)
+                {
+                    DecrementMultiplier();
+                }
             }
             yield return null;
         }

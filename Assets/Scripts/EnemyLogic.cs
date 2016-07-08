@@ -11,6 +11,7 @@ public class EnemyLogic : MonoBehaviour {
     GameObject pointPrefab;
     [SerializeField]
     MeshRenderer meshRenderer;
+    bool isKilledBecauseEndOfLevel = false;
     private int scoreWorth = 5;
 	
 	public void Init (Color color, float damage, float speed) {
@@ -50,9 +51,14 @@ public class EnemyLogic : MonoBehaviour {
 
     }
 
+    private void Kill() {
+        isKilledBecauseEndOfLevel = true;
+        Kill(transform.position);
+    }
+
     void Kill(Vector3 explosionPos) {
-        ++GameControl.LevelEnemiesKilled;
         GameControl.CurrentScore += scoreWorth;
+        Color thisColor = transform.GetChild(0).GetComponent<MeshRenderer>().material.color;
         //hardcoded because i can
         for (int i = -1; i < 2; i++)
         {
@@ -68,11 +74,16 @@ public class EnemyLogic : MonoBehaviour {
                         transform.position + new Vector3(i * .5f, j * .5f, k * .5f),
                         transform.localRotation) as GameObject;
                         point.GetComponent<PointLogic>().Init(explosionPos);
+                        point.GetComponent<MeshRenderer>().material.color = thisColor;
                     }
 
                 }
             }
                             
+        }
+        if (!isKilledBecauseEndOfLevel)
+        {
+            ++GameControl.LevelEnemiesKilled;
         }
         Destroy(gameObject);
     }
@@ -80,10 +91,13 @@ public class EnemyLogic : MonoBehaviour {
     void OnEnable()
     {
         EventManager.StartListening(EventManager.EventType.OnGameOver, OnGameOver);
+        EventManager.StartListening(EventManager.EventType.OnLevelChanged, Kill);
     }
 
     void OnDisable() {
         EventManager.StopListening(EventManager.EventType.OnGameOver, OnGameOver);
+        EventManager.StopListening(EventManager.EventType.OnLevelChanged, Kill);
+
     }
 
     void OnGameOver() {
