@@ -9,32 +9,92 @@ public class PlayerHealth : MonoBehaviour
     private Color hurtColor;
     [SerializeField]
     private float maxHealth = 100;
-    private float health;
+    [SerializeField]
+    private float healthRegenRate = 1f;
+    [SerializeField]
+    private float healthRegenTime = .1f;
+    private float currentHealth;
     private MeshRenderer meshRenderer;
 
-    public void Hurt(float amount) {
-        health -= amount;
-        meshRenderer.material.color =
-            Color.Lerp(healthyColor, hurtColor, (maxHealth - health) / maxHealth);
-        if (health < 0)
+    private static PlayerHealth playerHealth;
+
+    public static PlayerHealth instance
+    {
+        get
         {
-            Destroy(gameObject);
+            if (!playerHealth)
+            {
+                playerHealth = FindObjectOfType<PlayerHealth>();
+                if (!playerHealth)
+                {
+                    Debug.LogError("There needs to be one active PlayerHealth script on a GameObject in your scene.");
+                }
+                else
+                {
+                    playerHealth.Init();
+                }
+            }
+
+            return playerHealth;
         }
     }
 
-    // Use this for initialization
-    void Start()
+    void Init()
     {
-        health = maxHealth;
+        currentHealth = maxHealth;
         meshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
-    
+        StartCoroutine("Heal");
     }
 
-    // Update is called once per frame
-    void Update()
+    public static float MaxHealth
     {
+        get
+        {
+            return instance.maxHealth;
+        }
 
+        set
+        {
+            instance.maxHealth = value;
+            instance.currentHealth = instance.maxHealth;
+        }
     }
 
+    public static void Hurt(float amount) {
+        instance.currentHealth -= amount;
+        instance.meshRenderer.material.color =
+            Color.Lerp(instance.healthyColor, instance.hurtColor, 
+            (instance.maxHealth - instance.currentHealth) / instance.maxHealth);
+        if (instance.currentHealth < 0)
+        {
+            Destroy(instance.gameObject);
+        }
+    }
 
+    IEnumerator Heal()
+    {
+        while (true)
+        {
+            if(currentHealth < maxHealth)
+            {
+                currentHealth += healthRegenRate;                
+            }
+            yield return new WaitForSeconds(healthRegenTime);
+        }
+    }
+
+    void OnEnable()
+    {
+        EventManager.StartListening(EventManager.EventType.OnUpgradesShown, OnUpgradesShown);
+    }
+
+    void OnDisable()
+    {
+        EventManager.StopListening(EventManager.EventType.OnUpgradesShown, OnUpgradesShown);
+    }
+
+    void OnUpgradesShown()
+    {
+        currentHealth = maxHealth;
+    }
 }

@@ -3,7 +3,8 @@ using System.Collections;
 
 public class SpawnerLogic : MonoBehaviour {
     private static int enemiesToSpawn = 20;
-    private static float timeToSpawn = .25f;
+    private float timeBetweenSpawns = .25f;
+    private float timeToSpawn = 2f;
     private float damage;
     private float speed;
     private Color color;
@@ -24,42 +25,35 @@ public class SpawnerLogic : MonoBehaviour {
         }
     }
 
-    public static float TimeToSpawn
-    {
-        get
-        {
-            return timeToSpawn;
-        }
-
-        set
-        {
-            timeToSpawn = value;
-        }
-    }
-
     // Use this for initialization
     public void Init (Color color, float damage, float speed) {
         this.damage = damage;
         this.speed = speed;
         this.color = color;
+        transform.GetChild(0).GetComponent<SpriteRenderer>().color = color;
         StartCoroutine("Spawn");
 	}
 
     IEnumerator Spawn() {
-        while(!finishedSpawning)
+        yield return new WaitForSeconds(timeToSpawn);
+        while (!finishedSpawning)
         {
-            if (GameControl.LevelEnemiesLeftToSpawn > 0)
+            if (!GameControl.GamePaused)
             {
-                --GameControl.LevelEnemiesLeftToSpawn;
-                GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity) as GameObject;
-                enemy.name = "Enemy #" + GameControl.LevelEnemiesLeftToSpawn;
-                enemy.GetComponent<EnemyLogic>().Init(color, damage, speed);
-                ++enemiesSpawned;
-                finishedSpawning = enemiesSpawned == enemiesToSpawn;
+                if (GameControl.LevelEnemiesLeftToSpawn > 0)
+                {
+                    --GameControl.LevelEnemiesLeftToSpawn;
+                    GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity) as GameObject;
+                    enemy.name = "Enemy #" + GameControl.LevelEnemiesLeftToSpawn;
+                    enemy.GetComponent<EnemyLogic>().Init(color, damage, speed);
+                    ++enemiesSpawned;
+                    finishedSpawning = enemiesSpawned == enemiesToSpawn;
+                }
+                else
+                    finishedSpawning = true;
+                yield return new WaitForSeconds(timeBetweenSpawns);
             }
-            else
-                finishedSpawning = true;
-            yield return new WaitForSeconds(timeToSpawn);
+            yield return null;
         }
         Destroy();
     }

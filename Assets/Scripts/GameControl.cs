@@ -38,6 +38,8 @@ public class GameControl : MonoBehaviour
     [SerializeField]
     int levelsUntilUpgrade = 5;
 
+    bool gamePaused = false;
+
     bool finishedSpawning = false;
     [SerializeField]
     private GameObject spawnerPrefab;
@@ -188,6 +190,19 @@ public class GameControl : MonoBehaviour
         }
     }
 
+    public static bool GamePaused
+    {
+        get
+        {
+            return instance.gamePaused;
+        }
+
+        set
+        {
+            instance.gamePaused = value;
+        }
+    }
+
     void LevelChanged()
     {
         instance.levelEnemiesToSpawn = CalculateEnemiesToSpawn();
@@ -201,6 +216,13 @@ public class GameControl : MonoBehaviour
         instance.levelEnemiesKilled = 0;
         CalculateDamages();
         finishedSpawning = false;
+
+        if(currentLevel % levelsUntilUpgrade == 0)
+        {
+            GamePaused = true;
+            UpgradeControl.ShowUpgrades();
+            EventManager.TriggerEvent(EventManager.EventType.OnUpgradesShown);
+        }
     }
 
     void CalculateDamages()
@@ -212,6 +234,11 @@ public class GameControl : MonoBehaviour
         instance.levelEnemyMaximumDamage = 5 + currentLevel;
     }
 
+    public static void ResumeGame()
+    {
+        GamePaused = false;
+    }
+
     int CalculateSpawnerEnemies()
     {
         return currentLevel * 5;
@@ -219,39 +246,41 @@ public class GameControl : MonoBehaviour
 
     int CalculateEnemiesToSpawn()
     {
-        return 10 + currentLevel * 5;
+        return currentLevel * 1;
     }
 
     IEnumerator InitSpawners()
     {
         while (true)
         {
-            int potentialEnemies = levelEnemiesToSpawn;
-            while (!finishedSpawning)
+            if (!GamePaused)
             {
-                GameObject spawner = 
-                Instantiate(
-                    spawnerPrefab,
-                    new Vector3(
-                    Random.Range(-mapWidth / 2, mapWidth / 2),
-                    0,
-                    Random.Range(-mapHeight / 2, mapHeight / 2)
-                    ),
-                    Quaternion.identity
-                    ) as GameObject;
-                float enemyPower = Random.value;
-                spawner.GetComponent<SpawnerLogic>().Init(
-                    Color.Lerp(currentColor, Color.HSVToRGB(currentHue + levelDeltaHue, 1, 1), enemyPower),
-                    levelEnemyMinimumDamage + levelEnemyMaximumDamage * enemyPower,
-                    levelEnemyMinimumSpeed + levelEnemyMaximumSpeed * enemyPower);
-                potentialEnemies -= SpawnerLogic.EnemiesToSpawn;
-                if (potentialEnemies <= 0)
+                int potentialEnemies = levelEnemiesToSpawn;
+                while (!finishedSpawning)
                 {
-                    finishedSpawning = true;
+                    GameObject spawner =
+                    Instantiate(
+                        spawnerPrefab,
+                        new Vector3(
+                        Random.Range(-mapWidth / 2, mapWidth / 2),
+                        0,
+                        Random.Range(-mapHeight / 2, mapHeight / 2)
+                        ),
+                        Quaternion.identity
+                        ) as GameObject;
+                    float enemyPower = Random.value;
+                    spawner.GetComponent<SpawnerLogic>().Init(
+                        Color.Lerp(currentColor, Color.HSVToRGB(currentHue + levelDeltaHue, 1, 1), enemyPower),
+                        levelEnemyMinimumDamage + levelEnemyMaximumDamage * enemyPower,
+                        levelEnemyMinimumSpeed + levelEnemyMaximumSpeed * enemyPower);
+                    potentialEnemies -= SpawnerLogic.EnemiesToSpawn;
+                    if (potentialEnemies <= 0)
+                    {
+                        finishedSpawning = true;
+                    }
+                    yield return new WaitForSeconds(timeBetweenSpawners);
                 }
-                   
-                yield return new WaitForSeconds(timeBetweenSpawners);
-            }
+            }            
             yield return null;
         }
 

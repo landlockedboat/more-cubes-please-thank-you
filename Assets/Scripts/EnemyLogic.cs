@@ -41,22 +41,22 @@ public class EnemyLogic : MonoBehaviour {
         if (col.gameObject.tag == "Bullet")
         {
             Destroy(col.gameObject);
-            Kill(col.transform.position);
+            Kill(col.transform.position, false);
         }
         if(col.gameObject.tag == "Player")
         {
-            col.GetComponent<PlayerHealth>().Hurt(damage);
-            Kill(col.transform.position);
+            PlayerHealth.Hurt(damage);
+            Kill(col.transform.position, false);
         }
 
     }
 
     private void Kill() {
         isKilledBecauseEndOfLevel = true;
-        Kill(transform.position);
+        Kill(transform.position, false);
     }
 
-    void Kill(Vector3 explosionPos) {
+    public void Kill(Vector3 explosionPos, bool isMissile) {
         GameControl.CurrentScore += scoreWorth;
         Color thisColor = transform.GetChild(0).GetComponent<MeshRenderer>().material.color;
         //hardcoded because i can
@@ -73,7 +73,7 @@ public class EnemyLogic : MonoBehaviour {
                     Instantiate(pointPrefab,
                         transform.position + new Vector3(i * .5f, j * .5f, k * .5f),
                         transform.localRotation) as GameObject;
-                        point.GetComponent<PointLogic>().Init(explosionPos);
+                        point.GetComponent<PointLogic>().Init(explosionPos, isMissile);
                         point.GetComponent<MeshRenderer>().material.color = thisColor;
                     }
 

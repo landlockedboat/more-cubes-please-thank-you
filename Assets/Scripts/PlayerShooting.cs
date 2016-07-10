@@ -2,26 +2,65 @@
 using System.Collections;
 
 public class PlayerShooting : MonoBehaviour {
-
-    private Transform playerGeom;
-    private static float cooldownTime = .1f;
-    static int maxMissiles;
-    static int currentMissiles = 0;
-    private float currentTime;
+    Transform playerGeom;
+    [SerializeField]
+    float cooldownTime = .1f;
+    [SerializeField]
+    int enemiesTillNextMissile;
+    [SerializeField]
+    int maxMissiles = 1;
+    int currentMissiles = 0;
+    float currentTime;
     [SerializeField]
     GameObject bulletPrefab;
+    [SerializeField]
+    GameObject missilePrefab;
     Transform muzzle;
+
+    private static PlayerShooting playerShooting;
+
+    public static PlayerShooting instance
+    {
+        get
+        {
+            if (!playerShooting)
+            {
+                playerShooting = FindObjectOfType<PlayerShooting>();
+                if (!playerShooting)
+                {
+                    Debug.LogError("There needs to be one active PlayerShooting script on a GameObject in your scene.");
+                }
+                else
+                {
+                    playerShooting.Init();
+                }
+            }
+
+            return playerShooting;
+        }
+    }
+
+    void Init()
+    {
+        playerGeom = transform.GetChild(0);
+        muzzle = transform.GetChild(0).transform.GetChild(0);
+        currentTime = cooldownTime;
+        currentMissiles = maxMissiles;
+        //We do this to trigger the UI inisialisation.
+        MaxMissiles = maxMissiles;
+        CurrentMissiles = currentMissiles;
+    }
 
     public static float CooldownTime
     {
         get
         {
-            return cooldownTime;
+            return instance.cooldownTime;
         }
 
         set
         {
-            cooldownTime = value;
+            instance.cooldownTime = value;
         }
     }
 
@@ -29,12 +68,14 @@ public class PlayerShooting : MonoBehaviour {
     {
         get
         {
-            return maxMissiles;
+            return instance.maxMissiles;
         }
 
         set
         {
-            maxMissiles = value;
+            instance.maxMissiles = value;
+            MissilesPanelUI.MaxMissiles = instance.maxMissiles;
+            CurrentMissiles = instance.maxMissiles;
         }
     }
 
@@ -42,31 +83,31 @@ public class PlayerShooting : MonoBehaviour {
     {
         get
         {
-            return currentMissiles;
+            return instance.currentMissiles;
         }
 
         set
         {
-            currentMissiles = value;
+            instance.currentMissiles = value;
+            MissilesPanelUI.CurrentMissiles = instance.currentMissiles;
         }
-    }
-
-    void Start() {
-        playerGeom = transform.GetChild(0);
-        muzzle = transform.GetChild(0).transform.GetChild(0);
-        currentTime = cooldownTime;
-    }
+    } 
 
     void Update () {
         Vector3 mouse = Input.mousePosition;
-        mouse.z = Camera.main.transform.position.y - playerGeom.position.y;
+        mouse.z = Camera.main.transform.position.y - instance.playerGeom.position.y;
         playerGeom.LookAt(Camera.main.ScreenToWorldPoint(mouse));
         if (Input.GetMouseButton(0) && currentTime <= 0)
         {
             currentTime = cooldownTime;
-            Instantiate(bulletPrefab, muzzle.transform.position, playerGeom.transform.localRotation);
+            Instantiate(instance.bulletPrefab, instance.muzzle.transform.position, instance.playerGeom.transform.localRotation);
         }
         if (currentTime > 0)
             currentTime -= Time.deltaTime;
+        if(Input.GetMouseButtonDown(1) && currentMissiles > 0)
+        {
+            --CurrentMissiles;
+            Instantiate(instance.missilePrefab, instance.muzzle.transform.position, instance.playerGeom.transform.localRotation);
+        }
     }
 }

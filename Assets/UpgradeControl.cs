@@ -2,6 +2,21 @@
 using System.Collections;
 
 public class UpgradeControl : MonoBehaviour {
+    [Range(0,100)]
+    [SerializeField]
+    float healthPercentageIncrease = 50;    
+    [Range(0, 100)]
+    [SerializeField]
+    float shootingRatePercentageDecrease = 20;
+    [Range(0, 100)]
+    [SerializeField]
+    float missileCollectionRateIncrease = 50;
+    [SerializeField]
+    int missileSlotsIncrease = 1;
+    [SerializeField]
+    int enemyShootThroughIncrease = 1;
+    
+    
 
     private static UpgradeControl upgradeControl;
 
@@ -33,36 +48,36 @@ public class UpgradeControl : MonoBehaviour {
 
     public static void ShowUpgrades()
     {
-        //UpgradesUI.ShowUpgrades();
+        UpgradesUI.SetActive(true);
+        UpgradesUI.ShowUpgrades();
     }
 
-    public static void UpgradeChosen(UpgradeType ut)
+
+    public static void UpgradeChosen(UpgradeType type)
     {
-        switch (ut)
+        switch (type)
         {
-            case UpgradeType.MoreLife:
-                
+            case UpgradeType.MoreLifeUpgrade:
+                           
                 break;
-            case UpgradeType.RateOfFire:
-                PlayerShooting.CooldownTime -= PlayerShooting.CooldownTime * .5f;
+            case UpgradeType.MoreMissilesUpgrade:
                 break;
-            case UpgradeType.MoreMissiles:
-
+            case UpgradeType.MissileRateUpgrade:
                 break;
-            case UpgradeType.MissileRate:
-
+            case UpgradeType.ShootThroughUpgrade:
                 break;
-            case UpgradeType.ShootThrough:
-
+            case UpgradeType.FireRateUpgrade:
                 break;
             default:
                 break;
         }
-        //GameController.ResumeGame();
+        Debug.Log(type);
+        UpgradesUI.SetActive(false);
+        GameControl.ResumeGame();
     }
 
     public enum UpgradeType
     {
-        MoreLife, RateOfFire, MoreMissiles, MissileRate, ShootThrough
+        MoreLifeUpgrade, MoreMissilesUpgrade, MissileRateUpgrade, ShootThroughUpgrade, FireRateUpgrade
     }
 }

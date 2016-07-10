@@ -12,16 +12,13 @@ public class PointLogic : MonoBehaviour
     private static float explosionForce = 500f;
     private static float explosionRadius = 10f;
 
-    private Transform magnetTransform;
-    private static float magnetAttraction = 20f;
-
     // Use this for initialization
-    public void Init(Vector3 explosionPos)
+    public void Init(Vector3 explosionPos, bool isMissile)
     {
         randomisedTimeToDie = timeToDie + deltaTimeToDie * Random.Range(-1, 1);
         rigidbody = GetComponent<Rigidbody>();
         rigidbody.AddExplosionForce(
-            explosionForce, explosionPos, explosionRadius
+            (isMissile ? explosionForce * 2: explosionForce), explosionPos, explosionRadius
             );
         StartCoroutine("Die");
     }
@@ -40,34 +37,7 @@ public class PointLogic : MonoBehaviour
             yield return null;
         }
         Destroy();
-    }
-
-    void OnTriggerEnter(Collider col) {
-        if(col.gameObject.tag == "Player")
-        {
-            GameControl.CurrentScore += 1;
-            Destroy();
-        }
-        if(col.gameObject.tag == "Magnet")
-        {
-            magnetTransform = col.transform;
-            StartCoroutine("GoToMagnet");
-        }
-    }
-
-    IEnumerator GoToMagnet()
-    {
-        while (true)
-        {
-            if (rigidbody == null || magnetTransform == null)
-                break;
-            rigidbody.MovePosition(Vector3.MoveTowards(
-                transform.position, 
-                magnetTransform.position,
-                magnetAttraction * Time.deltaTime));
-            yield return null;
-        }
-    }
+    }   
 
     void Destroy()
     {
