@@ -51,7 +51,8 @@ public class PlayerShooting : MonoBehaviour {
         //We do this to trigger the UI inisialisation.
         MaxMissiles = maxMissiles;
         CurrentMissiles = currentMissiles;
-        
+        EnemiesTillNextMissile = enemiesTillNextMissile;
+        CurrentEnemiesTillNextMissile = currentEnemiesTillNextMissile;        
     }
 
     public static float CooldownTime
@@ -76,10 +77,7 @@ public class PlayerShooting : MonoBehaviour {
 
         set
         {
-            Debug.Log(instance.maxMissiles);
             instance.maxMissiles = value;
-            Debug.Log(instance.maxMissiles);
-
             MissilesPanelUI.MaxMissiles = instance.maxMissiles;
             CurrentMissiles = instance.maxMissiles;
         }
@@ -118,8 +116,22 @@ public class PlayerShooting : MonoBehaviour {
             instance.enemiesTillNextMissile = value;
             if(instance.currentEnemiesTillNextMissile > instance.enemiesTillNextMissile)
             {
-                instance.currentEnemiesTillNextMissile = instance.enemiesTillNextMissile;
+                instance.CurrentEnemiesTillNextMissile = instance.enemiesTillNextMissile;
             }
+            MissilesPanelUI.EnemiesTillNextMissile = instance.enemiesTillNextMissile;
+        }
+    }
+
+    private int CurrentEnemiesTillNextMissile
+    {
+        get
+        {
+            return currentEnemiesTillNextMissile;
+        }
+        set
+        {
+            currentEnemiesTillNextMissile = value;
+            MissilesPanelUI.CurrentEnemiesTillNextMissile = currentEnemiesTillNextMissile;
         }
     }
 
@@ -135,10 +147,12 @@ public class PlayerShooting : MonoBehaviour {
 
     void OnEnemyKilled()
     {
-        if (--currentEnemiesTillNextMissile <= 0)
+        if(CurrentMissiles < MaxMissiles)
+            --CurrentEnemiesTillNextMissile;
+        if (currentEnemiesTillNextMissile <= 0)
         {
             ++CurrentMissiles;
-            currentEnemiesTillNextMissile = enemiesTillNextMissile;
+            CurrentEnemiesTillNextMissile = enemiesTillNextMissile;
         }
     }
 

@@ -19,6 +19,6 @@ public class TextLevelControl : MonoBehaviour {
     }
 
     void UpdateLevelText() {
-        levelText.text = "Level " + GameControl.CurrentLevel;
+        levelText.text = "Level " + LevelControl.CurrentLevel;
     }
 }

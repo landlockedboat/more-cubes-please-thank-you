@@ -41,7 +41,7 @@ public class PointLogic : MonoBehaviour
 
     void Destroy()
     {
-        --OptimisationControl.CurrentPointsInScene;
+        --OptimisationControl.CurrentParticlesInscene;
         Destroy(gameObject);
     }
 }

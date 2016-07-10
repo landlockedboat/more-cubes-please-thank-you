@@ -47,8 +47,8 @@ public class CameraController : MonoBehaviour {
             if (newHeight.y < maxHeight)
             {
                 map.transform.localScale += new Vector3(growDelta * magicalScaleConstant, 0, growDelta * magicalScaleConstant);
-                GameControl.MapHeight += growDelta * magicalScaleConstant;
-                GameControl.MapWidth += growDelta * magicalScaleConstant;
+                LevelControl.SpawnMapHeight += growDelta * magicalScaleConstant;
+                LevelControl.SpawnMapWidth += growDelta * magicalScaleConstant;
                 bool finishedLerping = false;
                 while (!finishedLerping)
                 {

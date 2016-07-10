@@ -3,42 +3,71 @@ using System.Collections;
 
 public class OptimisationControl : MonoBehaviour {
     [SerializeField]
-    private float timeToKillBullets = 2f;
+    private float bulletLifespan = 2f;
     private float currentTimeToKillBullets;
-    private static float maxPointsInScene = 200;
-    private static float currentPointsInScene = 0;
+    [SerializeField]
+    private float maxParticlesInScene = 200;
+    private float currentParticlesInscene = 0;
 
-    public static float MaxPointsInScene
+    private static OptimisationControl upgradeControl;
+
+    public static OptimisationControl instance
     {
         get
         {
-            return maxPointsInScene;
+            if (!upgradeControl)
+            {
+                upgradeControl = FindObjectOfType<OptimisationControl>();
+                if (!upgradeControl)
+                {
+                    Debug.LogError("There needs to be one active OptimisationControl script on a GameObject in your scene.");
+                }
+                else
+                {
+                    upgradeControl.Init();
+                }
+            }
+
+            return upgradeControl;
         }
     }
 
-    public static float CurrentPointsInScene
+    void Init()
+    {
+
+    }
+
+    public static float MaxParticlesInScene
     {
         get
         {
-            return currentPointsInScene;
+            return instance.maxParticlesInScene;
+        }
+    }
+
+    public static float CurrentParticlesInscene
+    {
+        get
+        {
+            return instance.currentParticlesInscene;
         }
 
         set
         {
-            currentPointsInScene = value;
+            instance.currentParticlesInscene = value;
         }
     }
 
     // Use this for initialization
     void Start () {
-        currentTimeToKillBullets = timeToKillBullets;
+        currentTimeToKillBullets = bulletLifespan;
     }
 	
 	// Update is called once per frame
 	void Update () {
 	    if(currentTimeToKillBullets <= 0)
         {
-            currentTimeToKillBullets = timeToKillBullets;
+            currentTimeToKillBullets = bulletLifespan;
             EventManager.TriggerEvent(EventManager.EventType.OnBulletKill);
         }
         currentTimeToKillBullets -= Time.deltaTime;

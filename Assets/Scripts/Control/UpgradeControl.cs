@@ -2,15 +2,15 @@
 using System.Collections;
 
 public class UpgradeControl : MonoBehaviour {
-    [Range(0,100)]
+    [Range(0f, 1f)]
     [SerializeField]
-    float healthPercentageIncrease = 50;    
-    [Range(0, 100)]
+    float healthPercentageIncrease = .2f;    
+    [Range(0f, 1f)]
     [SerializeField]
-    float shootingRatePercentageDecrease = 20;
-    [Range(0, 100)]
+    float shootingRatePercentageDecrease = .2f;
+    [Range(0f, 1f)]
     [SerializeField]
-    float missileCollectionRateIncrease = 50;
+    float missileCollectionRateIncrease = .5f;
     [SerializeField]
     int missileSlotsIncrease = 1;
     [SerializeField]
@@ -58,27 +58,27 @@ public class UpgradeControl : MonoBehaviour {
         switch (type)
         {
             case UpgradeType.MoreLifeUpgrade:
-                PlayerHealth.MaxHealth *= 1 + (instance.healthPercentageIncrease/100);
+                PlayerHealth.MaxHealth *= 1 + (instance.healthPercentageIncrease);
                 break;
             case UpgradeType.MoreMissilesUpgrade:
                 PlayerShooting.MaxMissiles += instance.missileSlotsIncrease;
                 break;
             case UpgradeType.MissileRateUpgrade:
-                PlayerShooting.EnemiesTillNextMissile *= 100 + (int)instance.missileCollectionRateIncrease;
+                PlayerShooting.EnemiesTillNextMissile *= 100 + (int)(instance.missileCollectionRateIncrease * 100);
                 PlayerShooting.EnemiesTillNextMissile /= 100;
                break;
             case UpgradeType.ShootThroughUpgrade:
                 BulletLogic.ShootThroughEnemies += instance.enemyShootThroughIncrease;
                 break;
             case UpgradeType.FireRateUpgrade:
-                PlayerShooting.CooldownTime *= 1 - (instance.shootingRatePercentageDecrease / 100);
+                PlayerShooting.CooldownTime *= 1 - (instance.shootingRatePercentageDecrease);
                 break;
             default:
                 break;
         }
         Debug.Log(type);
         UpgradesUI.SetActive(false);
-        GameControl.ResumeGame();
+        EventManager.TriggerEvent(EventManager.EventType.OnGameResumed);
     }
 
     public enum UpgradeType

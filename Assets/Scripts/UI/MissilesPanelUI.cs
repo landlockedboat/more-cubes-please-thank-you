@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class MissilesPanelUI : MonoBehaviour {
+public class MissilesPanelUI : MonoBehaviour
+{
     int maxMissiles;
     int currentMissiles;
+    int currentEnemiesTillNextMissile;
+    int enemiesTillNextMissile;
     private List<Image> missilesIconsUI;
     private RectTransform thisRectTransform;
     [SerializeField]
@@ -43,25 +46,29 @@ public class MissilesPanelUI : MonoBehaviour {
     {
         set
         {
-            Debug.Log(instance.currentMissiles);
-            Debug.Log(value);
-            if(instance.currentMissiles <= value)
+            if (instance.currentMissiles <= value)
             {
                 //We have more available missiles
-                if(instance.currentMissiles < instance.missilesIconsUI.Count)
+                if (instance.currentMissiles < instance.missilesIconsUI.Count)
                 {
                     Image image =
                     instance.missilesIconsUI[instance.currentMissiles];
-                    image.color = new Color(0, 0, 0, 1);
+                    image.fillAmount = 1;
                 }
             }
             else
             {
                 if (instance.currentMissiles >= 1)
                 {
-                    Image image =
-                    instance.missilesIconsUI[instance.currentMissiles - 1];
-                    image.color = new Color(0, 0, 0, .1f);
+                    float prevFill = 0;
+                    if (instance.currentMissiles < instance.maxMissiles)
+                    {
+                        Image image =
+                        instance.missilesIconsUI[instance.currentMissiles];
+                        prevFill = image.fillAmount;
+                        image.fillAmount = 0;
+                    }
+                    instance.missilesIconsUI[instance.currentMissiles - 1].fillAmount = prevFill;
                 }
             }
             instance.currentMissiles = value;
@@ -76,7 +83,7 @@ public class MissilesPanelUI : MonoBehaviour {
             bool isEven = instance.maxMissiles % 2 == 0;
             GameObject missileUI =
                Instantiate(instance.missileUIPrefab,
-               new Vector3(instance.maxMissiles / 2 * 
+               new Vector3(instance.maxMissiles / 2 *
                (isEven ? 50 : -50)
                , 0, 0)
                , Quaternion.identity) as GameObject;
@@ -89,7 +96,7 @@ public class MissilesPanelUI : MonoBehaviour {
                 instance.thisRectTransform.anchoredPosition = Vector3.zero;
             }
             missileUI.transform.SetParent(instance.transform, false);
-            instance.missilesIconsUI.Add(missileUI.GetComponent<Image>());
+            instance.missilesIconsUI.Add(missileUI.transform.GetChild(1).GetComponent<Image>());
             for (int i = 0; i < instance.maxMissiles; i++)
             {
                 CurrentMissiles = i;
@@ -97,13 +104,25 @@ public class MissilesPanelUI : MonoBehaviour {
         }
     }
 
-    // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public static int CurrentEnemiesTillNextMissile
+    {
+        set
+        {
+            instance.currentEnemiesTillNextMissile = value;
+            if (instance.currentMissiles < instance.maxMissiles)
+            {
+                Image image =
+                instance.missilesIconsUI[instance.currentMissiles];
+                image.fillAmount = 1 - ((float)instance.currentEnemiesTillNextMissile / instance.enemiesTillNextMissile);
+            }
+        }
+    }
+
+    public static int EnemiesTillNextMissile
+    {
+        set
+        {
+            instance.enemiesTillNextMissile = value;
+        }
+    }
 }

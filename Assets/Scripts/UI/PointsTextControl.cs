@@ -26,6 +26,6 @@ public class PointsTextControl : MonoBehaviour
 
     void UpdateScoreText()
     {
-        scoreText.text = GameControl.CurrentScore.ToString() + " x" + GameControl.CurrentMultiplier;
+        scoreText.text = ScoreControl.CurrentScore.ToString() + " x" + ScoreControl.CurrentMultiplier;
     }
 }

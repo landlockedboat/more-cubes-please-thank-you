@@ -57,7 +57,7 @@ public class EnemyLogic : MonoBehaviour {
     }
 
     public void Kill(Vector3 explosionPos, bool isMissile) {
-        GameControl.CurrentScore += scoreWorth;
+        ScoreControl.CurrentScore += scoreWorth;
         Color thisColor = transform.GetChild(0).GetComponent<MeshRenderer>().material.color;
         //hardcoded because i can
         for (int i = -1; i < 2; i++)
@@ -66,9 +66,9 @@ public class EnemyLogic : MonoBehaviour {
             {
                 for (int k = -1; k < 2; k++)
                 {
-                    if (OptimisationControl.CurrentPointsInScene < OptimisationControl.MaxPointsInScene)
+                    if (OptimisationControl.CurrentParticlesInscene < OptimisationControl.MaxParticlesInScene)
                     {
-                        ++OptimisationControl.CurrentPointsInScene;
+                        ++OptimisationControl.CurrentParticlesInscene;
                         GameObject point =
                     Instantiate(pointPrefab,
                         transform.position + new Vector3(i * .5f, j * .5f, k * .5f),
