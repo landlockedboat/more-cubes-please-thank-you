@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class PointsTextControl : MonoBehaviour
+public class ScoreTextUI : MonoBehaviour
 {
     Text scoreText;
 

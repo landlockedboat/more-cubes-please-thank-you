@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerShooting : MonoBehaviour {
+public class PlayerShooting : MonoBehaviour
+{
     Transform playerGeom;
     [SerializeField]
     float cooldownTime = .1f;
@@ -52,7 +53,7 @@ public class PlayerShooting : MonoBehaviour {
         MaxMissiles = maxMissiles;
         CurrentMissiles = currentMissiles;
         EnemiesTillNextMissile = enemiesTillNextMissile;
-        CurrentEnemiesTillNextMissile = currentEnemiesTillNextMissile;        
+        CurrentEnemiesTillNextMissile = currentEnemiesTillNextMissile;
     }
 
     public static float CooldownTime
@@ -91,8 +92,8 @@ public class PlayerShooting : MonoBehaviour {
         }
 
         set
-        {            
-            if(value > instance.maxMissiles)
+        {
+            if (value > instance.maxMissiles)
             {
                 instance.currentMissiles = instance.maxMissiles;
             }
@@ -100,7 +101,7 @@ public class PlayerShooting : MonoBehaviour {
             {
                 instance.currentMissiles = value;
                 MissilesPanelUI.CurrentMissiles = instance.currentMissiles;
-            }            
+            }
         }
     }
 
@@ -114,7 +115,7 @@ public class PlayerShooting : MonoBehaviour {
         set
         {
             instance.enemiesTillNextMissile = value;
-            if(instance.currentEnemiesTillNextMissile > instance.enemiesTillNextMissile)
+            if (instance.currentEnemiesTillNextMissile > instance.enemiesTillNextMissile)
             {
                 instance.CurrentEnemiesTillNextMissile = instance.enemiesTillNextMissile;
             }
@@ -147,7 +148,7 @@ public class PlayerShooting : MonoBehaviour {
 
     void OnEnemyKilled()
     {
-        if(CurrentMissiles < MaxMissiles)
+        if (CurrentMissiles < MaxMissiles)
             --CurrentEnemiesTillNextMissile;
         if (currentEnemiesTillNextMissile <= 0)
         {
@@ -156,7 +157,8 @@ public class PlayerShooting : MonoBehaviour {
         }
     }
 
-    void Update () {
+    void Update()
+    {
         Vector3 mouse = Input.mousePosition;
         mouse.z = Camera.main.transform.position.y - instance.playerGeom.position.y;
         playerGeom.LookAt(Camera.main.ScreenToWorldPoint(mouse));
@@ -164,13 +166,25 @@ public class PlayerShooting : MonoBehaviour {
         {
             currentTime = cooldownTime;
             Instantiate(instance.bulletPrefab, instance.muzzle.transform.position, instance.playerGeom.transform.localRotation);
+            StatisticsControl.AddToStat(StatisticsControl.Stat.bulletsShot, 1);
+            if (StatisticsControl.GetStat(StatisticsControl.Stat.bulletsShot) > 0)
+            {
+                StatisticsControl.SetStat(StatisticsControl.Stat.accuracy,
+                    Mathf.RoundToInt(
+                        (
+                    (float)(StatisticsControl.GetStat(StatisticsControl.Stat.enemiesKilledByBullets)) /
+                    (float)(StatisticsControl.GetStat(StatisticsControl.Stat.bulletsShot))
+                    ) * 100f
+                    ));
+            }
         }
         if (currentTime > 0)
             currentTime -= Time.deltaTime;
-        if(Input.GetMouseButtonDown(1) && currentMissiles > 0)
+        if (Input.GetMouseButtonDown(1) && currentMissiles > 0)
         {
             --CurrentMissiles;
             Instantiate(instance.missilePrefab, instance.muzzle.transform.position, instance.playerGeom.transform.localRotation);
+            StatisticsControl.AddToStat(StatisticsControl.Stat.missilesShot, 1);
         }
     }
 }

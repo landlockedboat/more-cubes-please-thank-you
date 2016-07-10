@@ -77,8 +77,21 @@ public class UpgradeControl : MonoBehaviour {
                 break;
         }
         Debug.Log(type);
+        EventManager.TriggerEvent(EventManager.EventType.OnUpgradesHidden);
+    }
+
+    void OnEnable()
+    {
+        EventManager.StartListening(EventManager.EventType.OnGameResumed, OnGameResumed);
+    }
+
+    void OnDisable()
+    {
+        EventManager.StopListening(EventManager.EventType.OnGameResumed, OnGameResumed);
+    }
+
+    void OnGameResumed() {
         UpgradesUI.SetActive(false);
-        EventManager.TriggerEvent(EventManager.EventType.OnGameResumed);
     }
 
     public enum UpgradeType

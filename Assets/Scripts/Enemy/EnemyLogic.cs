@@ -41,11 +41,22 @@ public class EnemyLogic : MonoBehaviour {
         if (col.gameObject.tag == "Bullet")
         {
             col.SendMessage("EnemyHit");
+            StatisticsControl.AddToStat(StatisticsControl.Stat.enemiesKilledByBullets, 1);
+            if (StatisticsControl.GetStat(StatisticsControl.Stat.bulletsShot) > 0)
+            {
+                StatisticsControl.SetStat(StatisticsControl.Stat.accuracy,
+                    Mathf.RoundToInt(
+                        (
+                    (float)(StatisticsControl.GetStat(StatisticsControl.Stat.enemiesKilledByBullets)) /
+                    (float)(StatisticsControl.GetStat(StatisticsControl.Stat.bulletsShot))
+                    ) * 100f
+                    ));
+            }
             Kill(col.transform.position, false);
         }
         if(col.gameObject.tag == "Player")
         {
-            PlayerHealth.Hurt(damage);
+            PlayerHealth.CurrentHealth -= damage;
             Kill(col.transform.position, false);
         }
 
@@ -84,6 +95,10 @@ public class EnemyLogic : MonoBehaviour {
         if (!isKilledBecauseEndOfLevel)
         {
             EventManager.TriggerEvent(EventManager.EventType.OnEnemyKilled);
+        }
+        if (isMissile)
+        {
+            StatisticsControl.AddToStat(StatisticsControl.Stat.enemiesKilledByMissile, 1);
         }
         Destroy(gameObject);
     }

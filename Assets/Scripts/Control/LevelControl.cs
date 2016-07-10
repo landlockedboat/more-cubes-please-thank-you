@@ -186,6 +186,7 @@ public class LevelControl : MonoBehaviour {
 
     private void OnEnemyKilled()
     {
+        StatisticsControl.AddToStat(StatisticsControl.Stat.totalEnemiesKilled, 1);        
         ++LevelEnemiesKilled;
     }
 

@@ -10,11 +10,13 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField]
     private float maxHealth = 100;
     [SerializeField]
-    private float healthRegenRate = 1f;
+    TextMesh textMesh;
     [SerializeField]
-    private float healthRegenTime = .1f;
+    float healingPerEnemy = .25f;
     private float currentHealth;
     private MeshRenderer meshRenderer;
+
+    float totalHealingDone = 0;
 
     private static PlayerHealth playerHealth;
 
@@ -41,9 +43,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Init()
     {
-        currentHealth = maxHealth;
         meshRenderer = transform.GetChild(0).GetComponent<MeshRenderer>();
-        StartCoroutine("Heal");
     }
 
     public static float MaxHealth
@@ -56,45 +56,61 @@ public class PlayerHealth : MonoBehaviour
         set
         {
             instance.maxHealth = value;
-            instance.currentHealth = instance.maxHealth;
+            CurrentHealth = instance.maxHealth;
         }
     }
 
-    public static void Hurt(float amount) {
-        instance.currentHealth -= amount;
-        instance.meshRenderer.material.color =
-            Color.Lerp(instance.healthyColor, instance.hurtColor, 
-            (instance.maxHealth - instance.currentHealth) / instance.maxHealth);
-        if (instance.currentHealth < 0)
-        {
-            Destroy(instance.gameObject);
-        }
-    }
-
-    IEnumerator Heal()
+    public static float CurrentHealth
     {
-        while (true)
+        get
         {
-            if(currentHealth < maxHealth)
-            {
-                currentHealth += healthRegenRate;                
-            }
-            yield return new WaitForSeconds(healthRegenTime);
+            return instance.currentHealth;
         }
+
+        set
+        {
+            instance.currentHealth = value;
+            Color currentColor =
+            Color.Lerp(instance.healthyColor, instance.hurtColor,
+            (instance.maxHealth - instance.currentHealth) / instance.maxHealth);
+            instance.meshRenderer.material.color = currentColor;
+            instance.textMesh.text = instance.currentHealth.ToString("F2") + "%";
+            if (instance.currentHealth < 0)
+            {
+                Destroy(instance.gameObject);
+            }
+        }
+    }
+
+    //COULD BE PROBLEMATIC
+    void Start() {
+        CurrentHealth = maxHealth;
     }
 
     void OnEnable()
     {
         EventManager.StartListening(EventManager.EventType.OnUpgradesShown, OnUpgradesShown);
+        EventManager.StartListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
     }
 
     void OnDisable()
     {
         EventManager.StopListening(EventManager.EventType.OnUpgradesShown, OnUpgradesShown);
+        EventManager.StopListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
+    }
+
+    void OnEnemyKilled()
+    {
+        if(CurrentHealth < MaxHealth)
+        {
+            CurrentHealth += healingPerEnemy;
+            totalHealingDone += healingPerEnemy;
+            StatisticsControl.SetStat(StatisticsControl.Stat.healedLife, Mathf.RoundToInt(totalHealingDone));
+        }
     }
 
     void OnUpgradesShown()
     {
-        currentHealth = maxHealth;
+        CurrentHealth = maxHealth;
     }
 }
