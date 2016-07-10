@@ -40,7 +40,7 @@ public class EnemyLogic : MonoBehaviour {
     void OnTriggerEnter(Collider col) {
         if (col.gameObject.tag == "Bullet")
         {
-            Destroy(col.gameObject);
+            col.SendMessage("EnemyHit");
             Kill(col.transform.position, false);
         }
         if(col.gameObject.tag == "Player")
@@ -83,7 +83,7 @@ public class EnemyLogic : MonoBehaviour {
         }
         if (!isKilledBecauseEndOfLevel)
         {
-            ++GameControl.LevelEnemiesKilled;
+            EventManager.TriggerEvent(EventManager.EventType.OnEnemyKilled);
         }
         Destroy(gameObject);
     }

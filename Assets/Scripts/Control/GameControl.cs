@@ -103,9 +103,7 @@ public class GameControl : MonoBehaviour
 
         set
         {
-            if (value > LevelEnemiesKilled)
-                IncrementMultiplier();
-            instance.levelEnemiesKilled = value;            
+            instance.levelEnemiesKilled = value;
             if (instance.levelEnemiesKilled >= instance.levelEnemiesToSpawn)
                 ++CurrentLevel;
         }
@@ -138,6 +136,22 @@ public class GameControl : MonoBehaviour
             instance.currentScore = instance.currentScore + deltaScore;
             EventManager.TriggerEvent(EventManager.EventType.OnScoreChanged);
         }
+    }
+
+    void OnEnable()
+    {
+        EventManager.StartListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
+    }
+
+    void OnDisable()
+    {
+        EventManager.StartListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
+    }
+
+    private void OnEnemyKilled()
+    {
+        ++LevelEnemiesKilled;
+        IncrementMultiplier();
     }
 
     public static void IncrementMultiplier() {
@@ -216,6 +230,8 @@ public class GameControl : MonoBehaviour
         instance.levelEnemiesKilled = 0;
         CalculateDamages();
         finishedSpawning = false;
+
+        SpawnerLogic.TimeBetweenSpawns *= .95f;
 
         if(currentLevel % levelsUntilUpgrade == 0)
         {

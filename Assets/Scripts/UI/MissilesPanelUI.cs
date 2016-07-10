@@ -43,10 +43,12 @@ public class MissilesPanelUI : MonoBehaviour {
     {
         set
         {
+            Debug.Log(instance.currentMissiles);
+            Debug.Log(value);
             if(instance.currentMissiles <= value)
             {
                 //We have more available missiles
-                if(instance.currentMissiles < instance.missilesIconsUI.Count - 1)
+                if(instance.currentMissiles < instance.missilesIconsUI.Count)
                 {
                     Image image =
                     instance.missilesIconsUI[instance.currentMissiles];
@@ -80,7 +82,7 @@ public class MissilesPanelUI : MonoBehaviour {
                , Quaternion.identity) as GameObject;
             if (isEven)
             {
-                instance.thisRectTransform.anchoredPosition = new Vector3(-50, 0, 0);
+                instance.thisRectTransform.anchoredPosition = new Vector3(-25, 0, 0);
             }
             else
             {

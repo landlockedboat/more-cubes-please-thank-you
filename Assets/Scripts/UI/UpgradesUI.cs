@@ -64,13 +64,12 @@ public class UpgradesUI : MonoBehaviour
 
     static public void ShowUpgrades()
     {
-        Debug.Log("Helo");
         int[] chosenOnes = new int[instance.upgradesShown];
         for (int i = 0; i < instance.upgradesShown; i++)
         {
             if (instance.instancedUpgrades[i] != null)
                 Destroy(instance.instancedUpgrades[i]);
-            int pick = Random.Range(0, instance.upgradesShown);
+            int pick = Random.Range(0, instance.upgradesRoulette.Length);
             bool alreadyPicked = false;
             for (int j = 0; j < i; j++)
             {

@@ -7,6 +7,7 @@ public class PlayerShooting : MonoBehaviour {
     float cooldownTime = .1f;
     [SerializeField]
     int enemiesTillNextMissile;
+    int currentEnemiesTillNextMissile;
     [SerializeField]
     int maxMissiles = 1;
     int currentMissiles = 0;
@@ -46,9 +47,11 @@ public class PlayerShooting : MonoBehaviour {
         muzzle = transform.GetChild(0).transform.GetChild(0);
         currentTime = cooldownTime;
         currentMissiles = maxMissiles;
+        currentEnemiesTillNextMissile = enemiesTillNextMissile;
         //We do this to trigger the UI inisialisation.
         MaxMissiles = maxMissiles;
         CurrentMissiles = currentMissiles;
+        
     }
 
     public static float CooldownTime
@@ -73,7 +76,10 @@ public class PlayerShooting : MonoBehaviour {
 
         set
         {
+            Debug.Log(instance.maxMissiles);
             instance.maxMissiles = value;
+            Debug.Log(instance.maxMissiles);
+
             MissilesPanelUI.MaxMissiles = instance.maxMissiles;
             CurrentMissiles = instance.maxMissiles;
         }
@@ -87,11 +93,54 @@ public class PlayerShooting : MonoBehaviour {
         }
 
         set
-        {
-            instance.currentMissiles = value;
-            MissilesPanelUI.CurrentMissiles = instance.currentMissiles;
+        {            
+            if(value > instance.maxMissiles)
+            {
+                instance.currentMissiles = instance.maxMissiles;
+            }
+            else
+            {
+                instance.currentMissiles = value;
+                MissilesPanelUI.CurrentMissiles = instance.currentMissiles;
+            }            
         }
-    } 
+    }
+
+    public static int EnemiesTillNextMissile
+    {
+        get
+        {
+            return instance.enemiesTillNextMissile;
+        }
+
+        set
+        {
+            instance.enemiesTillNextMissile = value;
+            if(instance.currentEnemiesTillNextMissile > instance.enemiesTillNextMissile)
+            {
+                instance.currentEnemiesTillNextMissile = instance.enemiesTillNextMissile;
+            }
+        }
+    }
+
+    void OnEnable()
+    {
+        EventManager.StartListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
+    }
+
+    void OnDisable()
+    {
+        EventManager.StopListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
+    }
+
+    void OnEnemyKilled()
+    {
+        if (--currentEnemiesTillNextMissile <= 0)
+        {
+            ++CurrentMissiles;
+            currentEnemiesTillNextMissile = enemiesTillNextMissile;
+        }
+    }
 
     void Update () {
         Vector3 mouse = Input.mousePosition;

@@ -3,8 +3,8 @@ using System.Collections;
 
 public class SpawnerLogic : MonoBehaviour {
     private static int enemiesToSpawn = 20;
-    private float timeBetweenSpawns = .25f;
-    private float timeToSpawn = 2f;
+    private static float timeBetweenSpawns = .25f;
+    private float timeToSpawn = .1f;
     private float damage;
     private float speed;
     private Color color;
@@ -22,6 +22,19 @@ public class SpawnerLogic : MonoBehaviour {
         set
         {
             enemiesToSpawn = value;
+        }
+    }
+
+    public static float TimeBetweenSpawns
+    {
+        get
+        {
+            return timeBetweenSpawns;
+        }
+
+        set
+        {
+            timeBetweenSpawns = value;
         }
     }
 

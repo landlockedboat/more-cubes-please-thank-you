@@ -58,15 +58,20 @@ public class UpgradeControl : MonoBehaviour {
         switch (type)
         {
             case UpgradeType.MoreLifeUpgrade:
-                           
+                PlayerHealth.MaxHealth *= 1 + (instance.healthPercentageIncrease/100);
                 break;
             case UpgradeType.MoreMissilesUpgrade:
+                PlayerShooting.MaxMissiles += instance.missileSlotsIncrease;
                 break;
             case UpgradeType.MissileRateUpgrade:
-                break;
+                PlayerShooting.EnemiesTillNextMissile *= 100 + (int)instance.missileCollectionRateIncrease;
+                PlayerShooting.EnemiesTillNextMissile /= 100;
+               break;
             case UpgradeType.ShootThroughUpgrade:
+                BulletLogic.ShootThroughEnemies += instance.enemyShootThroughIncrease;
                 break;
             case UpgradeType.FireRateUpgrade:
+                PlayerShooting.CooldownTime *= 1 - (instance.shootingRatePercentageDecrease / 100);
                 break;
             default:
                 break;
