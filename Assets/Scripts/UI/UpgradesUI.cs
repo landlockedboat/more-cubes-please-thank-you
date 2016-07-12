@@ -8,20 +8,18 @@ public class UpgradesUI : MonoBehaviour
     [SerializeField]
     int spaceBetweenUpgrades = 400;
     [SerializeField]
-    private GameObject moreLifeUpgrade;
+    GameObject moreLifeUpgrade;
     [SerializeField]
-    private GameObject moreMissilesUpgrade;
+    GameObject missileRateUpgrade;
     [SerializeField]
-    private GameObject missileRateUpgrade;
+    GameObject shootThroughUpgrade;
     [SerializeField]
-    private GameObject shootThroughUpgrade;
-    [SerializeField]
-    private GameObject rateOfFireUpgrade;
+    GameObject rateOfFireUpgrade;
 
-    private GameObject[] upgradesRoulette;
-    private GameObject[] instancedUpgrades;
+    GameObject[] upgradesRoulette;
+    GameObject[] instancedUpgrades;
 
-    private static UpgradesUI upgradesUI;
+    static UpgradesUI upgradesUI;
 
     public static UpgradesUI instance
     {
@@ -48,7 +46,6 @@ public class UpgradesUI : MonoBehaviour
     {
         upgradesRoulette = new GameObject[]{
             moreLifeUpgrade,
-            moreMissilesUpgrade,
             missileRateUpgrade,
             shootThroughUpgrade,
             rateOfFireUpgrade

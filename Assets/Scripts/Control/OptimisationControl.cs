@@ -3,32 +3,32 @@ using System.Collections;
 
 public class OptimisationControl : MonoBehaviour {
     [SerializeField]
-    private float bulletLifespan = 2f;
-    private float currentTimeToKillBullets;
+    float bulletLifespan = 2f;
+    float currentTimeToKillBullets;
     [SerializeField]
-    private float maxParticlesInScene = 200;
-    private float currentParticlesInscene = 0;
+    int maxParticlesInScene = 600;
+    int currentParticlesInscene = 0;
 
-    private static OptimisationControl upgradeControl;
+    static OptimisationControl optimisationControl;
 
     public static OptimisationControl instance
     {
         get
         {
-            if (!upgradeControl)
+            if (!optimisationControl)
             {
-                upgradeControl = FindObjectOfType<OptimisationControl>();
-                if (!upgradeControl)
+                optimisationControl = FindObjectOfType<OptimisationControl>();
+                if (!optimisationControl)
                 {
                     Debug.LogError("There needs to be one active OptimisationControl script on a GameObject in your scene.");
                 }
                 else
                 {
-                    upgradeControl.Init();
+                    optimisationControl.Init();
                 }
             }
 
-            return upgradeControl;
+            return optimisationControl;
         }
     }
 
@@ -37,15 +37,7 @@ public class OptimisationControl : MonoBehaviour {
 
     }
 
-    public static float MaxParticlesInScene
-    {
-        get
-        {
-            return instance.maxParticlesInScene;
-        }
-    }
-
-    public static float CurrentParticlesInscene
+    public static int CurrentParticlesInscene
     {
         get
         {
@@ -56,6 +48,20 @@ public class OptimisationControl : MonoBehaviour {
         {
             instance.currentParticlesInscene = value;
         }
+    }
+
+    public static int MaxParticlesInScene
+    {
+        get
+        {
+            return instance.maxParticlesInScene;
+        }
+    }
+
+    public static float ParticleSpawnChance () {
+        float ret = 
+        1 - (float)instance.currentParticlesInscene / (float)instance.maxParticlesInScene;
+        return ret;
     }
 
     // Use this for initialization

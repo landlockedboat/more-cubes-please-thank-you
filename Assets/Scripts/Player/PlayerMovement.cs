@@ -5,9 +5,9 @@ public class PlayerMovement : MonoBehaviour
 {
 
     [SerializeField]
-    private float speed = 5;
-    private new Rigidbody rigidbody;
-    private static Vector3 pos;
+    float speed = 5;
+    new Rigidbody rigidbody;
+    static Vector3 pos;
     float deltaSpeed;
 
     public static Vector3 Pos

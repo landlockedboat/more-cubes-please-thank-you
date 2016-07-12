@@ -2,40 +2,18 @@
 using System.Collections;
 
 public class BulletLogic : MonoBehaviour {
-    private static float speed = 20;
-    private static int shootThroughEnemies = 1;
-    private int currentShootThroughEnemies;
-    private bool killFlag = false;
 
-    public static float Speed
-    {
-        get
-        {
-            return speed;
-        }
-
-        set
-        {
-            speed = value;
-        }
-    }
-
-    public static int ShootThroughEnemies
-    {
-        get
-        {
-            return shootThroughEnemies;
-        }
-
-        set
-        {
-            shootThroughEnemies = value;
-        }
-    }
+    int currentShootThroughEnemies;
+    int shootThroughEnemies;
+    float speed;
+    bool killFlag = false;  
 
     void Start()
     {
+        shootThroughEnemies = BulletsControl.ShootThroughEnemies;
         currentShootThroughEnemies = shootThroughEnemies;
+
+        speed = BulletsControl.Speed;
     }
 
     void OnEnable() {
@@ -59,7 +37,7 @@ public class BulletLogic : MonoBehaviour {
         }
     }
 
-    private void Destroy() {
+    void Destroy() {
         if (killFlag)
             Destroy(gameObject);
         else

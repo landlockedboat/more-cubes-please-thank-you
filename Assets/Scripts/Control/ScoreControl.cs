@@ -3,8 +3,8 @@ using System.Collections;
 
 public class ScoreControl : MonoBehaviour
 {
-    private int currentScore = 0;
-    private int currentMultiplier = 0;
+    int currentScore = 0;
+    int currentMultiplier = 1;
     /// <summary>
     /// The time it takes to the multiplier to go down by one
     /// </summary>
@@ -18,7 +18,7 @@ public class ScoreControl : MonoBehaviour
     float deltaMultiplierTime = .01f;
     bool isGamePaused = false;
 
-    private static ScoreControl scoreControl;
+    static ScoreControl scoreControl;
 
     public static ScoreControl instance
     {
@@ -86,7 +86,7 @@ public class ScoreControl : MonoBehaviour
         isGamePaused = false;
     }
 
-    private void OnEnemyKilled()
+    void OnEnemyKilled()
     {
         IncrementMultiplier();
     }
@@ -124,7 +124,7 @@ public class ScoreControl : MonoBehaviour
             if (currentMultiplier > 0 && !isGamePaused)
             {
                 currentMultiplierTime -= deltaMultiplierTime;
-                if (currentMultiplierTime <= 0)
+                if (currentMultiplierTime <= 0 && currentMultiplier > 1)
                 {
                     DecrementMultiplier();
                 }

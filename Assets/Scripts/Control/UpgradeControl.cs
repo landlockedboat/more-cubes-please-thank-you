@@ -2,23 +2,38 @@
 using System.Collections;
 
 public class UpgradeControl : MonoBehaviour {
+    [Header("Health upgrade")]
     [Range(0f, 1f)]
     [SerializeField]
-    float healthPercentageIncrease = .2f;    
+    float healthPercentageIncrease = .2f;
+    [Range(0f, 1f)]
+    [SerializeField]
+    float healingPercentageIncrease = .2f;
+
+    [Header("Bullets upgrade")]
     [Range(0f, 1f)]
     [SerializeField]
     float shootingRatePercentageDecrease = .2f;
     [Range(0f, 1f)]
     [SerializeField]
+    float shootingSpeedPercentageIncrease = .15f;
+
+    [Header("Missiles upgarde")]
+    [Range(0f, 1f)]
+    [SerializeField]
     float missileCollectionRateIncrease = .5f;
     [SerializeField]
     int missileSlotsIncrease = 1;
+
+    [Header("Shoot through upgrade")]
     [SerializeField]
     int enemyShootThroughIncrease = 1;
-    
+
+    [Header("Multishot upgrade")]
+    int nOfExtraBulletsShot = 1;    
     
 
-    private static UpgradeControl upgradeControl;
+    static UpgradeControl upgradeControl;
 
     public static UpgradeControl instance
     {

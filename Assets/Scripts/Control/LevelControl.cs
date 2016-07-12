@@ -4,7 +4,7 @@ using System.Collections;
 public class LevelControl : MonoBehaviour {
 
     [SerializeField]
-    private int currentLevel = 1;
+    int currentLevel = 1;
 
     [SerializeField]
     float levelDeltaHue = .01f;
@@ -21,7 +21,7 @@ public class LevelControl : MonoBehaviour {
     [SerializeField]
     int spawnerEnemiesToSpawnTimesTheLevel = 5;
     [SerializeField]
-    int baseSpawnerEnemiesToSpawn = 10;
+    int baseSpawnerEnemiesToSpawn = 10;    
 
     [Space(10)]
     [SerializeField]
@@ -34,6 +34,14 @@ public class LevelControl : MonoBehaviour {
     [Range(0, 1)]
     [SerializeField]
     float enemySpeedIncrease = .01f;
+
+    [Header("Special level things")]
+    [SerializeField]
+    float speedIncreasePercentage = .6f;
+    [SerializeField]
+    float speedDecreasePercentage = .6f;
+    bool fasterEnemies = false;
+    bool slowerEnemies = false;
 
     [Range(0f,1f)]
     [SerializeField]
@@ -50,7 +58,7 @@ public class LevelControl : MonoBehaviour {
     float levelEnemyMaximumDamage;
     float levelEnemyMaximumSpeed;
 
-    
+    [Space(10)]
     [SerializeField]
     float spawnMapWidth;
     [SerializeField]
@@ -58,9 +66,9 @@ public class LevelControl : MonoBehaviour {
 
     bool finishedSpawning = false;
     [SerializeField]
-    private GameObject spawnerPrefab;
+    GameObject spawnerPrefab;
     [SerializeField]
-    private float timeBetweenSpawners = 1f;
+    float timeBetweenSpawners = 1f;
 
     [SerializeField]
     int levelsUntilUpgrade = 5;
@@ -68,7 +76,7 @@ public class LevelControl : MonoBehaviour {
     bool isGamePaused = false;
 
 
-    private static LevelControl levelControl;
+    static LevelControl levelControl;
 
     public static LevelControl instance
     {
@@ -160,6 +168,22 @@ public class LevelControl : MonoBehaviour {
         }
     }
 
+    public static bool FasterEnemies
+    {
+        set
+        {
+            instance.fasterEnemies = value;
+        }
+    }
+
+    public static bool SlowerEnemies
+    {
+        set
+        {
+            instance.slowerEnemies = value;
+        }
+    }
+
     void OnEnable()
     {
         EventManager.StartListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
@@ -184,7 +208,7 @@ public class LevelControl : MonoBehaviour {
         isGamePaused = false;
     }
 
-    private void OnEnemyKilled()
+    void OnEnemyKilled()
     {
         StatisticsControl.AddToStat(StatisticsControl.Stat.totalEnemiesKilled, 1);        
         ++LevelEnemiesKilled;
@@ -219,12 +243,21 @@ public class LevelControl : MonoBehaviour {
                         ),
                         Quaternion.identity
                         ) as GameObject;
+
                     float enemyPower = Random.value;
+                    Color enemyColor = Color.Lerp(currentColor, Color.HSVToRGB(currentHue + levelDeltaHue, 1, 1), enemyPower);
+                    float enemyDamage = Mathf.Max(levelEnemyMinimumDamage, levelEnemyMaximumDamage * enemyPower);
+                    float enemySpeed = Mathf.Max(levelEnemyMinimumSpeed, levelEnemyMaximumSpeed * enemyPower);
+                    if (fasterEnemies)
+                        enemySpeed *= speedIncreasePercentage;
+                    else if (slowerEnemies)
+                        enemySpeed *= speedDecreasePercentage;
                     spawner.GetComponent<SpawnerLogic>().Init(
-                        Color.Lerp(currentColor, Color.HSVToRGB(currentHue + levelDeltaHue, 1, 1), enemyPower),
-                        Mathf.Max(levelEnemyMinimumDamage, levelEnemyMaximumDamage * enemyPower),
-                        Mathf.Max(levelEnemyMinimumSpeed, levelEnemyMaximumSpeed * enemyPower));
-                    potentialEnemies -= SpawnerLogic.EnemiesToSpawn;
+                        enemyColor,
+                        enemyDamage,
+                        enemySpeed
+                        );
+                    potentialEnemies -= SpawnerControl.EnemiesToSpawn;
                     if (potentialEnemies <= 0)
                     {
                         finishedSpawning = true;
@@ -240,7 +273,7 @@ public class LevelControl : MonoBehaviour {
     {
         instance.levelEnemiesToSpawn = CalculateEnemiesToSpawn();
         instance.levelEnemiesLeftToSpawn = instance.levelEnemiesToSpawn;
-        SpawnerLogic.EnemiesToSpawn = CalculateSpawnerEnemies();
+        SpawnerControl.EnemiesToSpawn = CalculateSpawnerEnemies();
         currentHue += levelDeltaHue;
         if (currentHue >= 1)
             currentHue = 0;
@@ -250,7 +283,7 @@ public class LevelControl : MonoBehaviour {
         CalculateDamages();
         finishedSpawning = false;
 
-        SpawnerLogic.TimeBetweenSpawns *= .95f;
+        SpawnerControl.TimeBetweenSpawns *= .95f;
 
         if (currentLevel % levelsUntilUpgrade == 0)
         {            

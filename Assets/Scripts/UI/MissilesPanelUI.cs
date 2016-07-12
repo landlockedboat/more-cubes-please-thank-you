@@ -8,12 +8,12 @@ public class MissilesPanelUI : MonoBehaviour
     int currentMissiles;
     int currentEnemiesTillNextMissile;
     int enemiesTillNextMissile;
-    private List<Image> missilesIconsUI;
-    private RectTransform thisRectTransform;
+    List<Image> missilesIconsUI;
+    RectTransform thisRectTransform;
     [SerializeField]
-    private GameObject missileUIPrefab;
+    GameObject missileUIPrefab;
 
-    private static MissilesPanelUI missilesPanelUI;
+    static MissilesPanelUI missilesPanelUI;
 
     public static MissilesPanelUI instance
     {

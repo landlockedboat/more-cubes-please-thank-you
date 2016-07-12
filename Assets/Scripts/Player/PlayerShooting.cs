@@ -18,8 +18,9 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField]
     GameObject missilePrefab;
     Transform muzzle;
+    bool canShootMissiles = true;
 
-    private static PlayerShooting playerShooting;
+    static PlayerShooting playerShooting;
 
     public static PlayerShooting instance
     {
@@ -123,7 +124,7 @@ public class PlayerShooting : MonoBehaviour
         }
     }
 
-    private int CurrentEnemiesTillNextMissile
+    int CurrentEnemiesTillNextMissile
     {
         get
         {
@@ -133,6 +134,14 @@ public class PlayerShooting : MonoBehaviour
         {
             currentEnemiesTillNextMissile = value;
             MissilesPanelUI.CurrentEnemiesTillNextMissile = currentEnemiesTillNextMissile;
+        }
+    }
+
+    public static bool CanShootMissiles
+    {
+        set
+        {
+            instance.canShootMissiles = value;
         }
     }
 
@@ -182,9 +191,12 @@ public class PlayerShooting : MonoBehaviour
             currentTime -= Time.deltaTime;
         if (Input.GetMouseButtonDown(1) && currentMissiles > 0)
         {
-            --CurrentMissiles;
-            Instantiate(instance.missilePrefab, instance.muzzle.transform.position, instance.playerGeom.transform.localRotation);
-            StatisticsControl.AddToStat(StatisticsControl.Stat.missilesShot, 1);
+            if (canShootMissiles)
+            {
+                --CurrentMissiles;
+                Instantiate(instance.missilePrefab, instance.muzzle.transform.position, instance.playerGeom.transform.localRotation);
+                StatisticsControl.AddToStat(StatisticsControl.Stat.missilesShot, 1);
+            }
         }
     }
 }

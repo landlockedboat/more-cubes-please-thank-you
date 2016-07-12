@@ -3,16 +3,17 @@ using System.Collections;
 
 public class EnemyLogic : MonoBehaviour {
     [SerializeField]
-    private NavMeshAgent navMeshAgent;
-    private Vector3 prevPlayerPos;
-    private bool isGameOver = false;
-    private float damage = 5f;
+    NavMeshAgent navMeshAgent;
+    Vector3 prevPlayerPos;
+    bool isGameOver = false;
+    float damage = 5f;
     [SerializeField]
     GameObject pointPrefab;
     [SerializeField]
     MeshRenderer meshRenderer;
     bool isKilledBecauseEndOfLevel = false;
-    private int scoreWorth = 5;
+    [SerializeField]
+    int scoreWorth = 5;
 	
 	public void Init (Color color, float damage, float speed) {
         this.damage = damage;
@@ -62,7 +63,7 @@ public class EnemyLogic : MonoBehaviour {
 
     }
 
-    private void Kill() {
+    void Kill() {
         isKilledBecauseEndOfLevel = true;
         Kill(transform.position, false);
     }
@@ -77,7 +78,7 @@ public class EnemyLogic : MonoBehaviour {
             {
                 for (int k = -1; k < 2; k++)
                 {
-                    if (OptimisationControl.CurrentParticlesInscene < OptimisationControl.MaxParticlesInScene)
+                    if (Random.Range(0f,1f) < OptimisationControl.ParticleSpawnChance())
                     {
                         ++OptimisationControl.CurrentParticlesInscene;
                         GameObject point =

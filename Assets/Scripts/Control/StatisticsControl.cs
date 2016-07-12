@@ -5,7 +5,7 @@ public class StatisticsControl : MonoBehaviour {
 
     Dictionary<Stat, int> stats;
 
-    private static StatisticsControl statisticsControl;
+    static StatisticsControl statisticsControl;
 
     public static StatisticsControl instance
     {

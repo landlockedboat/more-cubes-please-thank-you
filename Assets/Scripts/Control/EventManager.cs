@@ -6,9 +6,9 @@ using System.Collections.Generic;
 public class EventManager : MonoBehaviour
 {
 
-    private Dictionary<EventType, UnityEvent> eventDictionary;
+    Dictionary<EventType, UnityEvent> eventDictionary;
 
-    private static EventManager eventManager;
+    static EventManager eventManager;
 
     public static EventManager instance
     {

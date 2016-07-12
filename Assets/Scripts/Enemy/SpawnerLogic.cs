@@ -2,42 +2,29 @@
 using System.Collections;
 
 public class SpawnerLogic : MonoBehaviour {
-    private static int enemiesToSpawn = 20;
-    private static float timeBetweenSpawns = .25f;
-    private float timeToSpawn = .1f;
-    private float damage;
-    private float speed;
-    private Color color;
-    private bool finishedSpawning = false;
-    private int enemiesSpawned = 0;
+
+    float timeToSpawn = .1f;
+    float damage;
+    float speed;
+    Color color;
+    bool finishedSpawning = false;
+    int enemiesSpawned = 0;
     bool isGamePaused = false;
     [SerializeField]
     GameObject enemyPrefab;
-    public static int EnemiesToSpawn
-    {
-        get
-        {
-            return enemiesToSpawn;
-        }
 
-        set
-        {
-            enemiesToSpawn = value;
-        }
-    }
+    [Header("Special level stuff")]
+    [SerializeField]
+    float enemyScaleIncrease = .25f;
+    [SerializeField]
+    float enemyScaleDecrease = .25f;
 
-    public static float TimeBetweenSpawns
-    {
-        get
-        {
-            return timeBetweenSpawns;
-        }
+    int enemiesToSpawn;
+    float timeBetweenSpawns;
 
-        set
-        {
-            timeBetweenSpawns = value;
-        }
-    }
+    bool bigEnemies;
+    bool smallEnemies;
+
 
     // Use this for initialization
     public void Init (Color color, float damage, float speed) {
@@ -46,7 +33,13 @@ public class SpawnerLogic : MonoBehaviour {
         this.color = color;
         transform.GetChild(0).GetComponent<SpriteRenderer>().color = color;
         StartCoroutine("Spawn");
-	}
+
+        enemiesToSpawn = SpawnerControl.EnemiesToSpawn;
+        timeBetweenSpawns = SpawnerControl.TimeBetweenSpawns;
+
+        bigEnemies = SpawnerControl.BiggerEnemies;
+        smallEnemies = SpawnerControl.SmallerEnemies;
+}
 
     IEnumerator Spawn() {
         yield return new WaitForSeconds(timeToSpawn);
@@ -60,6 +53,16 @@ public class SpawnerLogic : MonoBehaviour {
                     GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity) as GameObject;
                     enemy.name = "Enemy #" + LevelControl.LevelEnemiesLeftToSpawn;
                     enemy.GetComponent<EnemyLogic>().Init(color, damage, speed);
+                    if (bigEnemies)
+                    {
+                        enemy.transform.localScale = enemy.transform.localScale + 
+                            new Vector3(enemyScaleIncrease, enemyScaleIncrease, enemyScaleIncrease);
+                    }
+                    else if (smallEnemies)
+                    {
+                        enemy.transform.localScale = enemy.transform.localScale -
+                            new Vector3(enemyScaleDecrease, enemyScaleDecrease, enemyScaleDecrease);
+                    }
                     ++enemiesSpawned;
                     finishedSpawning = enemiesSpawned == enemiesToSpawn;
                 }

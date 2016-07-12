@@ -4,21 +4,21 @@ using System.Collections;
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField]
-    private Color healthyColor;
+    Color healthyColor;
     [SerializeField]
-    private Color hurtColor;
+    Color hurtColor;
     [SerializeField]
-    private float maxHealth = 100;
+    float maxHealth = 100;
     [SerializeField]
     TextMesh textMesh;
     [SerializeField]
     float healingPerEnemy = .25f;
-    private float currentHealth;
-    private MeshRenderer meshRenderer;
+    float currentHealth;
+    MeshRenderer meshRenderer;
 
     float totalHealingDone = 0;
 
-    private static PlayerHealth playerHealth;
+    static PlayerHealth playerHealth;
 
     public static PlayerHealth instance
     {
@@ -82,6 +82,19 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    public static float HealingPerEnemy
+    {
+        get
+        {
+            return instance.healingPerEnemy;
+        }
+
+        set
+        {
+            instance.healingPerEnemy = value;
+        }
+    }
+
     //COULD BE PROBLEMATIC
     void Start() {
         CurrentHealth = maxHealth;
@@ -101,7 +114,7 @@ public class PlayerHealth : MonoBehaviour
 
     void OnEnemyKilled()
     {
-        if(CurrentHealth < MaxHealth)
+        if(CurrentHealth + healingPerEnemy < MaxHealth)
         {
             CurrentHealth += healingPerEnemy;
             totalHealingDone += healingPerEnemy;

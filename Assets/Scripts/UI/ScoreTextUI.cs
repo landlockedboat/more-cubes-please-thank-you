@@ -26,6 +26,6 @@ public class ScoreTextUI : MonoBehaviour
 
     void UpdateScoreText()
     {
-        scoreText.text = ScoreControl.CurrentScore.ToString() + " x" + ScoreControl.CurrentMultiplier;
+        scoreText.text = ScoreControl.CurrentScore.ToString("n0") + " x" + ScoreControl.CurrentMultiplier;
     }
 }
