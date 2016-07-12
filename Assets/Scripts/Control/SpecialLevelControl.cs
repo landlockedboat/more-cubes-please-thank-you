@@ -172,7 +172,7 @@ public class SpecialLevelControl : MonoBehaviour {
         specialLevelText.gameObject.SetActive(false);
     }
         
-    private enum SpecialLevel
+    enum SpecialLevel
     {
         NoHealing, DoubleHealing, BiggerEnemies, SmallerEnemies, FasterEnemies, SlowerEnemies, NoMissiles
     }

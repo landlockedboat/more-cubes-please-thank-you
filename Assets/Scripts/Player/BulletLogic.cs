@@ -10,10 +10,10 @@ public class BulletLogic : MonoBehaviour {
 
     void Start()
     {
-        shootThroughEnemies = BulletsControl.ShootThroughEnemies;
+        shootThroughEnemies = PlayerShooting.ShootThroughEnemies;
         currentShootThroughEnemies = shootThroughEnemies;
 
-        speed = BulletsControl.Speed;
+        speed = PlayerShooting.Speed;
     }
 
     void OnEnable() {

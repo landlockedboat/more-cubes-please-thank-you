@@ -4,8 +4,20 @@ using System.Collections;
 public class PlayerShooting : MonoBehaviour
 {
     Transform playerGeom;
+
+    [Header("Bullets") ]
     [SerializeField]
     float cooldownTime = .1f;
+    [SerializeField]
+    float bulletSpeed = 20;
+    [SerializeField]
+    int shootThroughEnemies = 1;
+    [SerializeField]
+    int currentBulletsShot = 1;
+    [SerializeField]
+    MuzzleLogic muzzleLogic;
+
+    [Header("Missiles")]
     [SerializeField]
     int enemiesTillNextMissile;
     int currentEnemiesTillNextMissile;
@@ -49,12 +61,22 @@ public class PlayerShooting : MonoBehaviour
         muzzle = transform.GetChild(0).transform.GetChild(0);
         currentTime = cooldownTime;
         currentMissiles = maxMissiles;
-        currentEnemiesTillNextMissile = enemiesTillNextMissile;
+        currentEnemiesTillNextMissile = enemiesTillNextMissile;        
+        UpdateMuzzles();
+
         //We do this to trigger the UI inisialisation.
         MaxMissiles = maxMissiles;
         CurrentMissiles = currentMissiles;
         EnemiesTillNextMissile = enemiesTillNextMissile;
         CurrentEnemiesTillNextMissile = currentEnemiesTillNextMissile;
+    }
+
+    void UpdateMuzzles() {
+        int currentMuzzles = muzzleLogic.CurrentMuzzles;
+        for (int i = 0; i < currentBulletsShot - currentMuzzles; i++)
+        {
+            muzzleLogic.AddMuzzle();
+        }
     }
 
     public static float CooldownTime
@@ -145,6 +167,45 @@ public class PlayerShooting : MonoBehaviour
         }
     }
 
+    public static float Speed
+    {
+        get
+        {
+            return instance.bulletSpeed;
+        }
+
+        set
+        {
+            instance.bulletSpeed = value;
+        }
+    }
+
+    public static int ShootThroughEnemies
+    {
+        get
+        {
+            return instance.shootThroughEnemies;
+        }
+
+        set
+        {
+            instance.shootThroughEnemies = value;
+        }
+    }
+
+    public static int CurrentBulletsShot
+    {
+        get
+        {
+            return instance.currentBulletsShot;
+        }
+
+        set
+        {
+            instance.currentBulletsShot = value;
+        }
+    }
+
     void OnEnable()
     {
         EventManager.StartListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
@@ -174,7 +235,7 @@ public class PlayerShooting : MonoBehaviour
         if (Input.GetMouseButton(0) && currentTime <= 0)
         {
             currentTime = cooldownTime;
-            Instantiate(instance.bulletPrefab, instance.muzzle.transform.position, instance.playerGeom.transform.localRotation);
+            muzzleLogic.Shoot();
             StatisticsControl.AddToStat(StatisticsControl.Stat.bulletsShot, 1);
             if (StatisticsControl.GetStat(StatisticsControl.Stat.bulletsShot) > 0)
             {

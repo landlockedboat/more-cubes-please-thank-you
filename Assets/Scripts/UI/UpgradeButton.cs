@@ -13,18 +13,17 @@ public class UpgradeButton : MonoBehaviour {
         UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.MoreMissilesUpgrade);
     }
 
-    public void MissileRateUpgrade()
-    {
-        UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.MissileRateUpgrade);
-    }
-
     public void ShootThroughUpgrade()
     {
         UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.ShootThroughUpgrade);
     }
 
-    public void FireRateUpgrade()
+    public void MoreBulletsUpgrade()
     {
-        UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.FireRateUpgrade);
+        UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.MoreBulletsUpgrade);
+    }
+
+    public void MultishotUpgrade() {
+        UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.MultishotUpgrade);
     }
 }

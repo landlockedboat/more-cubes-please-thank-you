@@ -14,7 +14,9 @@ public class UpgradesUI : MonoBehaviour
     [SerializeField]
     GameObject shootThroughUpgrade;
     [SerializeField]
-    GameObject rateOfFireUpgrade;
+    GameObject moreBulletsUpgrade;
+    [SerializeField]
+    GameObject multishotUpgrade;
 
     GameObject[] upgradesRoulette;
     GameObject[] instancedUpgrades;
@@ -48,7 +50,8 @@ public class UpgradesUI : MonoBehaviour
             moreLifeUpgrade,
             missileRateUpgrade,
             shootThroughUpgrade,
-            rateOfFireUpgrade
+            moreBulletsUpgrade,
+            multishotUpgrade
     };
         instancedUpgrades = new GameObject[upgradesShown];
 

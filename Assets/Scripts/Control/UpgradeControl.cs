@@ -74,19 +74,22 @@ public class UpgradeControl : MonoBehaviour {
         {
             case UpgradeType.MoreLifeUpgrade:
                 PlayerHealth.MaxHealth *= 1 + (instance.healthPercentageIncrease);
+                PlayerHealth.HealingPerEnemy *= 1 + instance.healingPercentageIncrease;
                 break;
             case UpgradeType.MoreMissilesUpgrade:
                 PlayerShooting.MaxMissiles += instance.missileSlotsIncrease;
-                break;
-            case UpgradeType.MissileRateUpgrade:
                 PlayerShooting.EnemiesTillNextMissile *= 100 + (int)(instance.missileCollectionRateIncrease * 100);
                 PlayerShooting.EnemiesTillNextMissile /= 100;
-               break;
-            case UpgradeType.ShootThroughUpgrade:
-                BulletLogic.ShootThroughEnemies += instance.enemyShootThroughIncrease;
                 break;
-            case UpgradeType.FireRateUpgrade:
+            case UpgradeType.ShootThroughUpgrade:
+                PlayerShooting.ShootThroughEnemies += instance.enemyShootThroughIncrease;
+                break;
+            case UpgradeType.MoreBulletsUpgrade:
                 PlayerShooting.CooldownTime *= 1 - (instance.shootingRatePercentageDecrease);
+                PlayerShooting.Speed *= 1 + instance.shootingSpeedPercentageIncrease;
+                break;
+            case UpgradeType.MultishotUpgrade:
+
                 break;
             default:
                 break;
@@ -111,6 +114,7 @@ public class UpgradeControl : MonoBehaviour {
 
     public enum UpgradeType
     {
-        MoreLifeUpgrade, MoreMissilesUpgrade, MissileRateUpgrade, ShootThroughUpgrade, FireRateUpgrade
+        MoreLifeUpgrade, MoreMissilesUpgrade, ShootThroughUpgrade, MoreBulletsUpgrade, MultishotUpgrade
+
     }
 }
