@@ -1480,7 +1480,7 @@ MonoBehaviour:
   cooldownTime: 0.33
   bulletSpeed: 20
   shootThroughEnemies: 1
-  currentBulletsShot: 3
+  currentBulletsShot: 1
   muzzleLogic: {fileID: 1668630866}
   enemiesTillNextMissile: 120
   maxMissiles: 1
@@ -1817,8 +1817,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a4720cb863798d4789b12706a8c9a25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
-  shootThroughEnemies: 1
 --- !u!1 &2145203127
 GameObject:
   m_ObjectHideFlags: 0

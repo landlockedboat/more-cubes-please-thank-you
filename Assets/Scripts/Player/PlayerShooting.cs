@@ -202,7 +202,12 @@ public class PlayerShooting : MonoBehaviour
 
         set
         {
+            int diff = value - instance.currentBulletsShot; 
             instance.currentBulletsShot = value;
+            for (int i = 0; i < diff; i++)
+            {
+                instance.muzzleLogic.AddMuzzle();
+            }            
         }
     }
 

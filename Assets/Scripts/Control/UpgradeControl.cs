@@ -89,7 +89,7 @@ public class UpgradeControl : MonoBehaviour {
                 PlayerShooting.Speed *= 1 + instance.shootingSpeedPercentageIncrease;
                 break;
             case UpgradeType.MultishotUpgrade:
-
+                PlayerShooting.CurrentBulletsShot += instance.nOfExtraBulletsShot;
                 break;
             default:
                 break;

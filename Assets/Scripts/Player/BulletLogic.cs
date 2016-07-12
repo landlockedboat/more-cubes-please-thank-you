@@ -12,7 +12,11 @@ public class BulletLogic : MonoBehaviour {
     {
         shootThroughEnemies = PlayerShooting.ShootThroughEnemies;
         currentShootThroughEnemies = shootThroughEnemies;
+        Init();
+    }
 
+    protected void Init()
+    {
         speed = PlayerShooting.Speed;
     }
 
