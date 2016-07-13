@@ -8,12 +8,13 @@ public class MissilesPanelUI : MonoBehaviour
     Text missilesText;
     [SerializeField]
     RectTransform missileProgressImage;
+    ShrinkAndMove sam;
     float progressImageOGWidth;
     int maxMissiles;
     int currentMissiles;
     int currentEnemiesTillNextMissile;
     int enemiesTillNextMissile = 1;
-    
+
     static MissilesPanelUI missilesPanelUI;
 
     public static MissilesPanelUI instance
@@ -40,12 +41,15 @@ public class MissilesPanelUI : MonoBehaviour
     void Init()
     {
         progressImageOGWidth = missileProgressImage.sizeDelta.x;
+        sam = GetComponent<ShrinkAndMove>();
     }
 
     public static int CurrentMissiles
     {
         set
-        {            
+        {
+            if (instance.currentMissiles < value)
+                instance.sam.Animate();
             instance.currentMissiles = value;
             UpdateMissilesUI();
         }
@@ -56,6 +60,7 @@ public class MissilesPanelUI : MonoBehaviour
         set
         {
             instance.maxMissiles = value;
+            instance.sam.Animate();
             UpdateMissilesUI();
         }
     }
@@ -81,9 +86,16 @@ public class MissilesPanelUI : MonoBehaviour
     static void UpdateMissilesUI()
     {
         instance.missilesText.text = "Missiles: " + instance.currentMissiles + "/" + instance.maxMissiles;
-        instance.missileProgressImage.sizeDelta = new Vector2(instance.progressImageOGWidth *
-            (1 - (instance.currentEnemiesTillNextMissile / instance.enemiesTillNextMissile)),
-            instance.missileProgressImage.sizeDelta.y);
+        if (instance.currentMissiles >= instance.maxMissiles)
+        {
+            instance.missileProgressImage.sizeDelta = new Vector3(instance.progressImageOGWidth, instance.missileProgressImage.sizeDelta.y);
+        }
+        else
+        {
+            instance.missileProgressImage.sizeDelta = new Vector2(instance.progressImageOGWidth *
+                (1 - ((float)instance.currentEnemiesTillNextMissile / instance.enemiesTillNextMissile)),
+                instance.missileProgressImage.sizeDelta.y);
+        }
     }
 
 }

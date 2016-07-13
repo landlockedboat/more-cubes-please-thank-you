@@ -14,12 +14,19 @@ public class MissileLogic : BulletLogic
     float particleExplosionForce = 200f;
     [SerializeField]
     GameObject missileParticlePrefab;
+    [SerializeField]
+    GameObject explosionSoundPrefab;
+    [SerializeField]
+    AudioClip explosionAudioClip;
 
     void OnTriggerEnter(Collider col)
     {
         if (col.tag == "Enemy")
         {
             InstantiateMissileParticles();
+            GameObject soundPlayer = 
+            Instantiate(explosionSoundPrefab, transform.position, Quaternion.identity) as GameObject;
+            soundPlayer.GetComponent<SoundPlayerLogic>().AudioClip = explosionAudioClip;
             foreach (Collider c in Physics.OverlapSphere(transform.position, explosionRadius))
             {
                 if (c.tag == "Enemy")

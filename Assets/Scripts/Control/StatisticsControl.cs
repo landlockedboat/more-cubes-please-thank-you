@@ -57,7 +57,7 @@ public class StatisticsControl : MonoBehaviour {
 
     public enum Stat
     {
-        totalEnemiesKilled, enemiesKilledByBullets, bulletsShot, missilesShot, maxMultiplierHad, accuracy, healedLife,
-        enemiesKilledByMissile
+        TotalEnemiesKilled, EnemiesKilledByBullets, BulletsShot, MissilesShot, MaxMultiplierHad, Accuracy, HealedLife,
+        EnemiesKilledByMissile
     }
 }

@@ -10,8 +10,6 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField]
     float maxHealth = 100;
     [SerializeField]
-    TextMesh textMesh;
-    [SerializeField]
     float healingPerEnemy = .25f;
     float currentHealth;
     MeshRenderer meshRenderer;
@@ -74,7 +72,7 @@ public class PlayerHealth : MonoBehaviour
             Color.Lerp(instance.healthyColor, instance.hurtColor,
             (instance.maxHealth - instance.currentHealth) / instance.maxHealth);
             instance.meshRenderer.material.color = currentColor;
-            instance.textMesh.text = instance.currentHealth.ToString("F2") + "%";
+            HealthTextUI.SetText(instance.currentHealth.ToString("F2"));
             if (instance.currentHealth < 0)
             {
                 Destroy(instance.gameObject);
@@ -114,11 +112,13 @@ public class PlayerHealth : MonoBehaviour
 
     void OnEnemyKilled()
     {
-        if(CurrentHealth + healingPerEnemy < MaxHealth)
+        if(CurrentHealth < MaxHealth)
         {
             CurrentHealth += healingPerEnemy;
+            if (CurrentHealth > MaxHealth)
+                CurrentHealth = MaxHealth;
             totalHealingDone += healingPerEnemy;
-            StatisticsControl.SetStat(StatisticsControl.Stat.healedLife, Mathf.RoundToInt(totalHealingDone));
+            StatisticsControl.SetStat(StatisticsControl.Stat.HealedLife, Mathf.RoundToInt(totalHealingDone));
         }
     }
 

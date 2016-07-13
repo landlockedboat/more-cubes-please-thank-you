@@ -3,9 +3,12 @@ using System.Collections;
 
 public class SpawnerLogic : MonoBehaviour {
 
-    float timeToSpawn = .1f;
+    float timeToBeginSpawning = .1f;
     float damage;
     float speed;
+    float fadeSpeed;
+    bool fadingIn = true;
+
     Color color;
     bool finishedSpawning = false;
     int enemiesSpawned = 0;
@@ -32,17 +35,20 @@ public class SpawnerLogic : MonoBehaviour {
         this.speed = speed;
         this.color = color;
         transform.GetChild(0).GetComponent<SpriteRenderer>().color = color;
-        StartCoroutine("Spawn");
 
         enemiesToSpawn = SpawnerControl.EnemiesToSpawn;
         timeBetweenSpawns = SpawnerControl.TimeBetweenSpawns;
+        timeToBeginSpawning = SpawnerControl.TimeToBeginSpawning;
+        fadeSpeed = SpawnerControl.FadeSpeed;
 
         bigEnemies = SpawnerControl.BiggerEnemies;
         smallEnemies = SpawnerControl.SmallerEnemies;
-}
+        StartCoroutine("FadeIn");
+        StartCoroutine("Spawn");
+    }
 
     IEnumerator Spawn() {
-        yield return new WaitForSeconds(timeToSpawn);
+        yield return new WaitForSeconds(timeToBeginSpawning);
         while (!finishedSpawning)
         {
             if (!isGamePaused)
@@ -75,6 +81,33 @@ public class SpawnerLogic : MonoBehaviour {
         Destroy();
     }
 
+    IEnumerator FadeIn() {
+        SpriteRenderer mySpriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        mySpriteRenderer.color = mySpriteRenderer.color *= new Color(1f, 1f, 1f, 0);
+        while (fadingIn)
+        {
+            mySpriteRenderer.color += new Color(0, 0, 0, fadeSpeed * Time.deltaTime);
+            if (mySpriteRenderer.color.a >= 1)
+                fadingIn = false;
+            yield return null;
+        }
+    }
+
+    IEnumerator FadeOut()
+    {
+        fadingIn = false;
+        SpriteRenderer mySpriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        bool fadingOut = true;
+        while (fadingOut)
+        {
+            mySpriteRenderer.color -= new Color(0, 0, 0, fadeSpeed * Time.deltaTime);
+            if (mySpriteRenderer.color.a <= 0)
+                fadingOut = false;
+            yield return null;
+        }
+        Destroy(gameObject);
+    }
+
     void OnEnable() {
         EventManager.StartListening(EventManager.EventType.OnLevelChanged, Destroy);
         EventManager.StartListening(EventManager.EventType.OnGameOver, Destroy);
@@ -99,7 +132,7 @@ public class SpawnerLogic : MonoBehaviour {
     }
 
     void Destroy() {
-        Destroy(gameObject);
+        StartCoroutine("FadeOut");
     }
 
 }

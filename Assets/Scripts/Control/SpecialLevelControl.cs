@@ -132,11 +132,10 @@ public class SpecialLevelControl : MonoBehaviour {
         }
         instance.lastSpecialLevel = sl;
         instance.isOnSpecialLevel = true;
-        specialLevelString = "SPECIAL LEVEL! " + sl.ToString();
+        specialLevelString = "SPECIAL LEVEL! " + EnumParser.ParseUppercase(sl);
         if (!upgradesShowing)
         {
-            specialLevelText.gameObject.SetActive(true);
-            specialLevelText.text = specialLevelString;
+            InitSpecialLevelText();
         }
     }
 
@@ -170,6 +169,13 @@ public class SpecialLevelControl : MonoBehaviour {
         }
         instance.isOnSpecialLevel = false;
         specialLevelText.gameObject.SetActive(false);
+    }
+
+    void InitSpecialLevelText()
+    {
+        specialLevelText.gameObject.SetActive(true);
+        specialLevelText.text = specialLevelString;
+        specialLevelText.GetComponent<ShrinkAndMove>().Animate();
     }
         
     enum SpecialLevel

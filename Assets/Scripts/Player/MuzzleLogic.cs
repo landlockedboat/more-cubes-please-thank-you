@@ -14,6 +14,7 @@ public class MuzzleLogic : MonoBehaviour {
     GameObject bulletPrefab;
     [SerializeField]
     GameObject muzzlePrefab;
+    AudioSource aus;
 
     public int CurrentMuzzles
     {
@@ -26,6 +27,7 @@ public class MuzzleLogic : MonoBehaviour {
     void Start()
     {
         muzzles = new Dictionary<Transform, Quaternion>();
+        aus = GetComponent<AudioSource>();
     }
 
     public void AddMuzzle() {
@@ -55,5 +57,6 @@ public class MuzzleLogic : MonoBehaviour {
         {
             Instantiate(bulletPrefab, mt.Key.position, mt.Value * mt.Key.parent.localRotation * mt.Key.parent.parent.localRotation);
         }
+        aus.Play();
     }
 }

@@ -94,7 +94,6 @@ public class UpgradeControl : MonoBehaviour {
             default:
                 break;
         }
-        Debug.Log(type);
         EventManager.TriggerEvent(EventManager.EventType.OnUpgradesHidden);
     }
 

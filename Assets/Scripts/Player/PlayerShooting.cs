@@ -68,7 +68,7 @@ public class PlayerShooting : MonoBehaviour
         MaxMissiles = maxMissiles;
         CurrentMissiles = currentMissiles;
         EnemiesTillNextMissile = enemiesTillNextMissile;
-        CurrentEnemiesTillNextMissile = currentEnemiesTillNextMissile;
+        CurrentEnemiesTillNextMissile = 0;
     }
 
     void UpdateMuzzles() {
@@ -104,6 +104,7 @@ public class PlayerShooting : MonoBehaviour
             instance.maxMissiles = value;
             MissilesPanelUI.MaxMissiles = instance.maxMissiles;
             CurrentMissiles = instance.maxMissiles;
+            instance.currentEnemiesTillNextMissile = EnemiesTillNextMissile;
         }
     }
 
@@ -116,7 +117,12 @@ public class PlayerShooting : MonoBehaviour
 
         set
         {
-            if (value > instance.maxMissiles)
+            if (instance.currentMissiles < value)
+            {
+                instance.currentEnemiesTillNextMissile = instance.enemiesTillNextMissile;
+            }
+
+                if (value > instance.maxMissiles)
             {
                 instance.currentMissiles = instance.maxMissiles;
             }
@@ -214,22 +220,31 @@ public class PlayerShooting : MonoBehaviour
     void OnEnable()
     {
         EventManager.StartListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
+        EventManager.StartListening(EventManager.EventType.OnUpgradesShown, OnUpgradesShown);
     }
 
     void OnDisable()
     {
         EventManager.StopListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
+        EventManager.StopListening(EventManager.EventType.OnUpgradesShown, OnUpgradesShown);
+    }
+
+    void OnUpgradesShown()
+    {
+        CurrentMissiles = MaxMissiles;
     }
 
     void OnEnemyKilled()
     {
         if (CurrentMissiles < MaxMissiles)
-            --CurrentEnemiesTillNextMissile;
-        if (currentEnemiesTillNextMissile <= 0)
         {
-            ++CurrentMissiles;
-            CurrentEnemiesTillNextMissile = enemiesTillNextMissile;
-        }
+            --CurrentEnemiesTillNextMissile;
+            if (currentEnemiesTillNextMissile <= 0)
+            {
+                ++CurrentMissiles;
+                CurrentEnemiesTillNextMissile = EnemiesTillNextMissile;
+            }
+        }        
     }
 
     void Update()
@@ -241,14 +256,14 @@ public class PlayerShooting : MonoBehaviour
         {
             currentTime = cooldownTime;
             muzzleLogic.Shoot();
-            StatisticsControl.AddToStat(StatisticsControl.Stat.bulletsShot, 1);
-            if (StatisticsControl.GetStat(StatisticsControl.Stat.bulletsShot) > 0)
+            StatisticsControl.AddToStat(StatisticsControl.Stat.BulletsShot, 1);
+            if (StatisticsControl.GetStat(StatisticsControl.Stat.BulletsShot) > 0)
             {
-                StatisticsControl.SetStat(StatisticsControl.Stat.accuracy,
+                StatisticsControl.SetStat(StatisticsControl.Stat.Accuracy,
                     Mathf.RoundToInt(
                         (
-                    (float)(StatisticsControl.GetStat(StatisticsControl.Stat.enemiesKilledByBullets)) /
-                    (float)(StatisticsControl.GetStat(StatisticsControl.Stat.bulletsShot))
+                    (float)(StatisticsControl.GetStat(StatisticsControl.Stat.EnemiesKilledByBullets)) /
+                    (float)(StatisticsControl.GetStat(StatisticsControl.Stat.BulletsShot))
                     ) * 100f
                     ));
             }
@@ -261,7 +276,8 @@ public class PlayerShooting : MonoBehaviour
             {
                 --CurrentMissiles;
                 Instantiate(instance.missilePrefab, instance.muzzle.transform.position, instance.playerGeom.transform.localRotation);
-                StatisticsControl.AddToStat(StatisticsControl.Stat.missilesShot, 1);
+                StatisticsControl.AddToStat(StatisticsControl.Stat.MissilesShot, 1);
+                CurrentEnemiesTillNextMissile = EnemiesTillNextMissile;
             }
         }
     }

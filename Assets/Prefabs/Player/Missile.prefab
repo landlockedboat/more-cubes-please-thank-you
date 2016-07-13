@@ -110,6 +110,8 @@ MonoBehaviour:
   particleExplosionForce: 1000
   missileParticlePrefab: {fileID: 139472, guid: 1a175e647fe1ea147ba65f09cc843e5f,
     type: 2}
+  explosionSoundPrefab: {fileID: 183094, guid: f017cb542ec28074fa964606efaeae41, type: 2}
+  explosionAudioClip: {fileID: 8300000, guid: 69fa6b442c65a6b439e66e75014fa7df, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

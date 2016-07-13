@@ -54,7 +54,7 @@ public class StatisticsPanelUI : MonoBehaviour
         {
             int val =
             StatisticsControl.GetStat(stat);
-            statsText += stat.ToString().ToUpper() + ": " + val.ToString() + " ";
+            statsText += EnumParser.ParseUppercase(stat) + ": " + val.ToString() + " ";
         }
         statsText += " - ";
         statisticsText.text = statsText;

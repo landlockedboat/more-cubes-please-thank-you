@@ -9,13 +9,25 @@ public class EnemyLogic : MonoBehaviour {
     float damage = 5f;
     [SerializeField]
     GameObject pointPrefab;
+
+    [Header("Sound")]
+    [SerializeField]
+    GameObject soundPlayerPrefab;
+    [SerializeField]
+    AudioClip deathSound;
+    [Range(0f, 1f)]
+    [SerializeField]
+    float volume = .25f;
+
+    [Space(10)]
     [SerializeField]
     MeshRenderer meshRenderer;
     bool isKilledBecauseEndOfLevel = false;
     [SerializeField]
     int scoreWorth = 5;
-	
-	public void Init (Color color, float damage, float speed) {
+    bool omaeWaMouShindeiru = false;
+
+    public void Init (Color color, float damage, float speed) {
         this.damage = damage;
         meshRenderer.material.color = color;
         navMeshAgent.speed = speed;
@@ -23,6 +35,7 @@ public class EnemyLogic : MonoBehaviour {
         navMeshAgent.acceleration = speed / 1.1f;
         prevPlayerPos = PlayerMovement.Pos;
         navMeshAgent.SetDestination(prevPlayerPos);
+        StartCoroutine("Grow");
     }
 
     // Update is called once per frame
@@ -42,14 +55,14 @@ public class EnemyLogic : MonoBehaviour {
         if (col.gameObject.tag == "Bullet")
         {
             col.SendMessage("EnemyHit");
-            StatisticsControl.AddToStat(StatisticsControl.Stat.enemiesKilledByBullets, 1);
-            if (StatisticsControl.GetStat(StatisticsControl.Stat.bulletsShot) > 0)
+            StatisticsControl.AddToStat(StatisticsControl.Stat.EnemiesKilledByBullets, 1);
+            if (StatisticsControl.GetStat(StatisticsControl.Stat.BulletsShot) > 0)
             {
-                StatisticsControl.SetStat(StatisticsControl.Stat.accuracy,
+                StatisticsControl.SetStat(StatisticsControl.Stat.Accuracy,
                     Mathf.RoundToInt(
                         (
-                    (float)(StatisticsControl.GetStat(StatisticsControl.Stat.enemiesKilledByBullets)) /
-                    (float)(StatisticsControl.GetStat(StatisticsControl.Stat.bulletsShot))
+                    (float)(StatisticsControl.GetStat(StatisticsControl.Stat.EnemiesKilledByBullets)) /
+                    (float)(StatisticsControl.GetStat(StatisticsControl.Stat.BulletsShot))
                     ) * 100f
                     ));
             }
@@ -68,7 +81,7 @@ public class EnemyLogic : MonoBehaviour {
         Kill(transform.position, false);
     }
 
-    public void Kill(Vector3 explosionPos, bool isMissile) {
+    public void Kill(Vector3 explosionPos, bool isMissile) {        
         ScoreControl.CurrentScore += scoreWorth;
         Color thisColor = transform.GetChild(0).GetComponent<MeshRenderer>().material.color;
         //hardcoded because i can
@@ -93,15 +106,29 @@ public class EnemyLogic : MonoBehaviour {
             }
                             
         }
-        if (!isKilledBecauseEndOfLevel)
+        if (!isMissile && !omaeWaMouShindeiru)        
+            PlayDeadSound();
+        
+        if (!isKilledBecauseEndOfLevel && !omaeWaMouShindeiru)
         {
+            omaeWaMouShindeiru = true;
             EventManager.TriggerEvent(EventManager.EventType.OnEnemyKilled);
         }
         if (isMissile)
         {
-            StatisticsControl.AddToStat(StatisticsControl.Stat.enemiesKilledByMissile, 1);
+            StatisticsControl.AddToStat(StatisticsControl.Stat.EnemiesKilledByMissile, 1);
         }
+
         Destroy(gameObject);
+    }
+
+    void PlayDeadSound()
+    {
+        GameObject soundPlayer =
+        Instantiate(soundPlayerPrefab, transform.position, Quaternion.identity) as GameObject;
+        SoundPlayerLogic spl = soundPlayer.GetComponent<SoundPlayerLogic>();
+        spl.AudioClip = deathSound;
+        spl.Volume = volume;        
     }
 
     void OnEnable()
@@ -118,5 +145,20 @@ public class EnemyLogic : MonoBehaviour {
 
     void OnGameOver() {
         isGameOver = true;
+    }
+
+    IEnumerator Grow() {
+        float OGScale = transform.localScale.x;
+        transform.localScale = new Vector3(.01f, .01f, .01f);
+        float growSpeed = SpawnerControl.EnemyGrowingSpeed;
+        bool finished = false;
+        while (!finished)
+        {
+            float growDelta = growSpeed * Time.deltaTime;
+            transform.localScale += new Vector3(growDelta, growDelta, growDelta);
+            if (transform.localScale.x >= OGScale)
+                finished = true;
+            yield return null;
+        }
     }
 }

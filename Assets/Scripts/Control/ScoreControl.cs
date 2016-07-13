@@ -96,8 +96,8 @@ public class ScoreControl : MonoBehaviour
         ++instance.currentMultiplier;
         instance.multiplierTime -= instance.deltaMultiplierTime;
         instance.currentMultiplierTime = instance.multiplierTime;
-        if (StatisticsControl.GetStat(StatisticsControl.Stat.maxMultiplierHad) < instance.currentMultiplier)
-            StatisticsControl.SetStat(StatisticsControl.Stat.maxMultiplierHad, instance.currentMultiplier);
+        if (StatisticsControl.GetStat(StatisticsControl.Stat.MaxMultiplierHad) < instance.currentMultiplier)
+            StatisticsControl.SetStat(StatisticsControl.Stat.MaxMultiplierHad, instance.currentMultiplier);
         EventManager.TriggerEvent(EventManager.EventType.OnMultiplierChanged);
     }
 

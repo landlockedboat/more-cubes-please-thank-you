@@ -6,6 +6,12 @@ public class SpawnerControl : MonoBehaviour {
     int enemiesToSpawn = 20;
     [SerializeField]
     float timeBetweenSpawns = .25f;
+    [SerializeField]
+    float timeToBeginSpawning = 1f;
+    [SerializeField]
+    float fadeSpeed = 6;
+    [SerializeField]
+    float enemyGrowingSpeed = 6f;
 
     bool bigEnemies = false;
     bool smallEnemies = false;
@@ -53,14 +59,13 @@ public class SpawnerControl : MonoBehaviour {
 
     public static float TimeBetweenSpawns
     {
+        set
+        {
+            instance.timeToBeginSpawning = value;
+        }
         get
         {
             return instance.timeBetweenSpawns;
-        }
-
-        set
-        {
-            instance.timeBetweenSpawns = value;
         }
     }
 
@@ -86,6 +91,30 @@ public class SpawnerControl : MonoBehaviour {
         set
         {
             instance.smallEnemies = value;
+        }
+    }
+
+    public static float TimeToBeginSpawning
+    {
+        get
+        {
+            return instance.timeToBeginSpawning;
+        }
+    }
+
+    public static float FadeSpeed
+    {
+        get
+        {
+            return instance.fadeSpeed;
+        }
+    }
+
+    public static float EnemyGrowingSpeed
+    {
+        get
+        {
+            return instance.enemyGrowingSpeed;
         }
     }
 }
