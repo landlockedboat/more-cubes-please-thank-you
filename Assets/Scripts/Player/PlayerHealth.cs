@@ -75,6 +75,9 @@ public class PlayerHealth : MonoBehaviour
             HealthTextUI.SetText(instance.currentHealth.ToString("F2"));
             if (instance.currentHealth < 0)
             {
+                instance.currentHealth = 0;
+                HealthTextUI.SetText(instance.currentHealth.ToString("F2"));
+                EventManager.TriggerEvent(EventManager.EventType.OnGameOver);
                 Destroy(instance.gameObject);
             }
         }

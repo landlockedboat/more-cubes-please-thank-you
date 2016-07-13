@@ -133,9 +133,4 @@ public class ScoreControl : MonoBehaviour
         }
 
     }
-
-    public static void PlayerKilled()
-    {
-        EventManager.TriggerEvent(EventManager.EventType.OnGameOver);
-    }
 }

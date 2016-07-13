@@ -72,8 +72,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 169150, guid: 8d346e64d78dba64685b6df6c2c6960c, type: 2}
-  enemyScaleIncrease: 0.25
-  enemyScaleDecrease: 0.25
+  enemyScaleIncrease: 0.5
+  enemyScaleDecrease: 0.5
 --- !u!114 &11469032
 MonoBehaviour:
   m_ObjectHideFlags: 1
