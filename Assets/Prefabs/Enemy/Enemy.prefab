@@ -138,7 +138,7 @@ MonoBehaviour:
   pointPrefab: {fileID: 139472, guid: e3dd16366476f634787694d9a5b30705, type: 2}
   soundPlayerPrefab: {fileID: 183094, guid: f017cb542ec28074fa964606efaeae41, type: 2}
   deathSound: {fileID: 8300000, guid: f6ae1f46a2a49934a9be2c0b61d2d71c, type: 3}
-  volume: 0.05
+  volume: 1
   meshRenderer: {fileID: 2372402}
   scoreWorth: 5
 --- !u!195 &19560894

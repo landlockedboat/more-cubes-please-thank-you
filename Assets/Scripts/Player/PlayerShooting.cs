@@ -23,13 +23,9 @@ public class PlayerShooting : MonoBehaviour
     int currentEnemiesTillNextMissile;
     [SerializeField]
     int maxMissiles = 1;
+
     int currentMissiles = 0;
     float currentTime;
-    [SerializeField]
-    GameObject bulletPrefab;
-    [SerializeField]
-    GameObject missilePrefab;
-    Transform muzzle;
     bool canShootMissiles = true;
 
     static PlayerShooting playerShooting;
@@ -58,7 +54,6 @@ public class PlayerShooting : MonoBehaviour
     void Init()
     {
         playerGeom = transform.GetChild(0);
-        muzzle = transform.GetChild(0).transform.GetChild(0);
         currentTime = cooldownTime;
         currentMissiles = maxMissiles;
         currentEnemiesTillNextMissile = enemiesTillNextMissile;        
@@ -275,7 +270,7 @@ public class PlayerShooting : MonoBehaviour
             if (canShootMissiles)
             {
                 --CurrentMissiles;
-                Instantiate(instance.missilePrefab, instance.muzzle.transform.position, instance.playerGeom.transform.localRotation);
+                muzzleLogic.ShootMissile();
                 StatisticsControl.AddToStat(StatisticsControl.Stat.MissilesShot, 1);
                 CurrentEnemiesTillNextMissile = EnemiesTillNextMissile;
             }

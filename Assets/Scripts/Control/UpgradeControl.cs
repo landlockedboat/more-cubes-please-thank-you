@@ -1,27 +1,24 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using System.Collections;
+using System;
 
 public class UpgradeControl : MonoBehaviour {
-    [Header("Health upgrade")]
-    [Range(0f, 1f)]
+    [Header("Health upgrade")]    
     [SerializeField]
-    float healthPercentageIncrease = .2f;
-    [Range(0f, 1f)]
+    float healthAmmountIncrease = 100f;
     [SerializeField]
-    float healingPercentageIncrease = .2f;
+    float healingAmmountIncrease = .5f;
 
     [Header("Bullets upgrade")]
-    [Range(0f, 1f)]
     [SerializeField]
-    float shootingRatePercentageDecrease = .2f;
-    [Range(0f, 1f)]
+    float shootingRateAmmountDecrease = .075f;
     [SerializeField]
-    float shootingSpeedPercentageIncrease = .15f;
+    float shootingSpeedAmmountIncrease = 5f;
 
-    [Header("Missiles upgarde")]
-    [Range(0f, 1f)]
+    [Header("Missiles upgarde")]    
     [SerializeField]
-    float missileCollectionRateIncrease = .5f;
+    int enemiesTillNextMissileAmmountDecrease = 50;
     [SerializeField]
     int missileSlotsIncrease = 1;
 
@@ -30,7 +27,10 @@ public class UpgradeControl : MonoBehaviour {
     int enemyShootThroughIncrease = 1;
 
     [Header("Multishot upgrade")]
-    int nOfExtraBulletsShot = 1;    
+    [SerializeField]
+    int nOfExtraBulletsShot = 1;
+
+    Dictionary<UpgradeType, int> upgradeLevels;
     
 
     static UpgradeControl upgradeControl;
@@ -58,7 +58,11 @@ public class UpgradeControl : MonoBehaviour {
 
     void Init()
     {
-        
+        upgradeLevels = new Dictionary<UpgradeType, int>();
+        foreach (UpgradeType ut in Enum.GetValues(typeof(UpgradeType)))
+        {
+            upgradeLevels.Add(ut, 0);
+        }
     }
 
     public static void ShowUpgrades()
@@ -73,20 +77,19 @@ public class UpgradeControl : MonoBehaviour {
         switch (type)
         {
             case UpgradeType.MoreLifeUpgrade:
-                PlayerHealth.MaxHealth *= 1 + (instance.healthPercentageIncrease);
-                PlayerHealth.HealingPerEnemy *= 1 + instance.healingPercentageIncrease;
+                PlayerHealth.MaxHealth += instance.healthAmmountIncrease;
+                PlayerHealth.HealingPerEnemy += instance.healingAmmountIncrease;
                 break;
             case UpgradeType.MoreMissilesUpgrade:
                 PlayerShooting.MaxMissiles += instance.missileSlotsIncrease;
-                PlayerShooting.EnemiesTillNextMissile *= 100 + (int)(instance.missileCollectionRateIncrease * 100);
-                PlayerShooting.EnemiesTillNextMissile /= 100;
+                PlayerShooting.EnemiesTillNextMissile -= instance.enemiesTillNextMissileAmmountDecrease;
                 break;
             case UpgradeType.ShootThroughUpgrade:
                 PlayerShooting.ShootThroughEnemies += instance.enemyShootThroughIncrease;
                 break;
             case UpgradeType.MoreBulletsUpgrade:
-                PlayerShooting.CooldownTime *= 1 - (instance.shootingRatePercentageDecrease);
-                PlayerShooting.Speed *= 1 + instance.shootingSpeedPercentageIncrease;
+                PlayerShooting.CooldownTime -= instance.shootingRateAmmountDecrease;
+                PlayerShooting.Speed += instance.shootingSpeedAmmountIncrease;
                 break;
             case UpgradeType.MultishotUpgrade:
                 PlayerShooting.CurrentBulletsShot += instance.nOfExtraBulletsShot;
@@ -94,7 +97,13 @@ public class UpgradeControl : MonoBehaviour {
             default:
                 break;
         }
+        ++instance.upgradeLevels[type];
         EventManager.TriggerEvent(EventManager.EventType.OnUpgradesHidden);
+    }
+
+    public static int GetLevel(UpgradeType ut)
+    {
+        return instance.upgradeLevels[ut];
     }
 
     void OnEnable()

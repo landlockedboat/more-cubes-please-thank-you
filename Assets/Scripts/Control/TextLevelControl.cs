@@ -4,11 +4,9 @@ using System.Collections;
 
 public class TextLevelControl : MonoBehaviour{
     Text levelText;
-    ShrinkAndMove shrinkandMove;
 
     void Start () {
         levelText = GetComponent<Text>();
-        shrinkandMove = GetComponent<ShrinkAndMove>();
         UpdateLevelText();
     }
 
@@ -22,6 +20,7 @@ public class TextLevelControl : MonoBehaviour{
 
     void UpdateLevelText() {
         levelText.text = "Level " + LevelControl.CurrentLevel;
-        shrinkandMove.Animate();
+        gameObject.SetActive(false);
+        gameObject.SetActive(true);
     }
 }

@@ -3,8 +3,6 @@ using System.Collections;
 
 public class SpawnerControl : MonoBehaviour {
     [SerializeField]
-    int enemiesToSpawn = 20;
-    [SerializeField]
     float timeBetweenSpawns = .25f;
     [SerializeField]
     float timeToBeginSpawning = 1f;
@@ -12,6 +10,7 @@ public class SpawnerControl : MonoBehaviour {
     float fadeSpeed = 6;
     [SerializeField]
     float enemyGrowingSpeed = 6f;
+    int enemiesToSpawn;
 
     bool bigEnemies = false;
     bool smallEnemies = false;
@@ -39,29 +38,18 @@ public class SpawnerControl : MonoBehaviour {
         }
     }
 
+
     void Init()
     {
 
     }
 
-    public static int EnemiesToSpawn
-    {
-        get
-        {
-            return instance.enemiesToSpawn;
-        }
-
-        set
-        {
-            instance.enemiesToSpawn = value;
-        }
-    }
 
     public static float TimeBetweenSpawns
     {
         set
         {
-            instance.timeToBeginSpawning = value;
+            instance.timeBetweenSpawns = value;
         }
         get
         {
@@ -115,6 +103,19 @@ public class SpawnerControl : MonoBehaviour {
         get
         {
             return instance.enemyGrowingSpeed;
+        }
+    }
+
+    public static int EnemiesToSpawn
+    {
+        get
+        {
+            return instance.enemiesToSpawn;
+        }
+
+        set
+        {
+            instance.enemiesToSpawn = value;
         }
     }
 }

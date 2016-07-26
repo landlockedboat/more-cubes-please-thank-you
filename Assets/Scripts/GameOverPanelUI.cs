@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using System.Collections;
 
 public class GameOverPanelUI : MonoBehaviour {
-    ShrinkAndMoveGameOverPanel sam;
-
     static GameOverPanelUI gameOverPanelUI;
 
     public static GameOverPanelUI instance
@@ -45,8 +44,6 @@ public class GameOverPanelUI : MonoBehaviour {
     void OnGameOver()
     {
         instance.transform.GetChild(0).gameObject.SetActive(true);
-        instance.sam = instance.gameObject.GetComponent<ShrinkAndMoveGameOverPanel>();
-        instance.sam.Animate();
     }
 
     public void Retry()

@@ -8,12 +8,17 @@ public class MissilesPanelUI : MonoBehaviour
     Text missilesText;
     [SerializeField]
     RectTransform missileProgressImage;
-    ShrinkAndMove sam;
     float progressImageOGWidth;
     int maxMissiles;
     int currentMissiles;
     int currentEnemiesTillNextMissile;
     int enemiesTillNextMissile = 1;
+    [SerializeField]
+    AudioSource audioSource;
+
+    AnimateUI[] animateUI;
+
+    string missilesPanelText;
 
     static MissilesPanelUI missilesPanelUI;
 
@@ -41,17 +46,30 @@ public class MissilesPanelUI : MonoBehaviour
     void Init()
     {
         progressImageOGWidth = missileProgressImage.sizeDelta.x;
-        sam = GetComponent<ShrinkAndMove>();
+        animateUI = GetComponents<AnimateUI>();
+    }
+
+    void StartAnimation()
+    {
+        foreach (AnimateUI aUI in animateUI)
+        {
+            aUI.StartAnimation();
+        }
     }
 
     public static int CurrentMissiles
     {
         set
         {
-            if (instance.currentMissiles < value)
-                instance.sam.Animate();
+            int prevCurrentMissiles = instance.currentMissiles;                
             instance.currentMissiles = value;
             UpdateMissilesUI();
+            //We animate later to prevent errors
+            if (prevCurrentMissiles < instance.currentMissiles)
+            {
+                instance.StartAnimation();
+                instance.audioSource.Play();
+            }
         }
     }
 
@@ -60,8 +78,9 @@ public class MissilesPanelUI : MonoBehaviour
         set
         {
             instance.maxMissiles = value;
-            instance.sam.Animate();
             UpdateMissilesUI();
+            instance.StartAnimation();
+            instance.audioSource.Play();
         }
     }
 
@@ -85,7 +104,8 @@ public class MissilesPanelUI : MonoBehaviour
 
     static void UpdateMissilesUI()
     {
-        instance.missilesText.text = "Missiles: " + instance.currentMissiles + "/" + instance.maxMissiles;
+        instance.missilesPanelText = "Missiles: " + instance.currentMissiles + "/" + instance.maxMissiles;
+        instance.missilesText.text = instance.missilesPanelText;
         if (instance.currentMissiles >= instance.maxMissiles)
         {
             instance.missileProgressImage.sizeDelta = new Vector3(instance.progressImageOGWidth, instance.missileProgressImage.sizeDelta.y);
@@ -96,6 +116,11 @@ public class MissilesPanelUI : MonoBehaviour
                 (1 - ((float)instance.currentEnemiesTillNextMissile / instance.enemiesTillNextMissile)),
                 instance.missileProgressImage.sizeDelta.y);
         }
+    }
+
+    void OnEnable()
+    {
+        instance.missilesText.text = instance.missilesPanelText;
     }
 
 }

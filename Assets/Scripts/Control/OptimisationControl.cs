@@ -7,6 +7,7 @@ public class OptimisationControl : MonoBehaviour {
     float currentTimeToKillBullets;
     [SerializeField]
     int maxParticlesInScene = 600;
+
     int currentParticlesInscene = 0;
 
     static OptimisationControl optimisationControl;
@@ -34,7 +35,6 @@ public class OptimisationControl : MonoBehaviour {
 
     void Init()
     {
-
     }
 
     public static int CurrentParticlesInscene
@@ -76,6 +76,7 @@ public class OptimisationControl : MonoBehaviour {
             currentTimeToKillBullets = bulletLifespan;
             EventManager.TriggerEvent(EventManager.EventType.OnBulletKill);
         }
+        EventManager.TriggerEvent(EventManager.EventType.OnParticleClock);
         currentTimeToKillBullets -= Time.deltaTime;
 	}
 }

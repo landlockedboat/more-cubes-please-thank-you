@@ -3,11 +3,8 @@ using UnityEngine.UI;
 
 using System.Collections;
 
-public class HealthTextUI : MonoBehaviour {
+public class HealthTextUI : UIFollowWorldObject {
 
-    [SerializeField]
-    Transform healthTextMuzzle;
-    RectTransform rectTransform;
     Text text;
     bool isGameOver = false;
 
@@ -36,7 +33,6 @@ public class HealthTextUI : MonoBehaviour {
 
     void Init()
     {
-        rectTransform = GetComponent<RectTransform>();
         text = GetComponent<Text>();
     }
 
@@ -54,6 +50,7 @@ public class HealthTextUI : MonoBehaviour {
     void OnGameOver()
     {
         isGameOver = true;
+        Destroy(gameObject);
     }
 
     public static void SetText(string s)
@@ -64,9 +61,6 @@ public class HealthTextUI : MonoBehaviour {
 	void Update () {
         if (isGameOver)
             return;
-        Vector3 pos = healthTextMuzzle.position;
-        Vector3 viewportPoint = Camera.main.WorldToViewportPoint(pos);
-        rectTransform.anchorMin = viewportPoint;
-        rectTransform.anchorMax = viewportPoint;
+        FollowObject();
     }
 }

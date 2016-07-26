@@ -2,6 +2,18 @@
 
 public static class EnumParser {
 
+    public static string ParseAbbreviation(Enum e)
+    {
+        string text = ParseUppercase(e);
+        string[] res = text.Split(' ');
+        string ret = "";
+        foreach (string s in res)
+        {
+            ret += s.Substring(0, 1);
+        }
+        return ret;
+    }
+
     public static string ParseUppercase(Enum e)
     {
         return ParseStartCase(e).ToUpper();

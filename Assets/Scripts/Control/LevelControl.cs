@@ -34,6 +34,12 @@ public class LevelControl : MonoBehaviour {
     [Range(0, 1)]
     [SerializeField]
     float enemySpeedIncrease = .01f;
+    [Range(0f, 1f)]
+    [SerializeField]
+    float maxEnemyDamageIncrease = .1f;
+    [Range(0f, 1f)]
+    [SerializeField]
+    float maxEnemySpeedIncrease = .1f;
 
     [Header("Special level things")]
     [SerializeField]
@@ -43,12 +49,6 @@ public class LevelControl : MonoBehaviour {
     bool fasterEnemies = false;
     bool slowerEnemies = false;
 
-    [Range(0f,1f)]
-    [SerializeField]
-    float maxEnemyDamageIncrease = .1f;
-    [Range(0f, 1f)]
-    [SerializeField]
-    float maxEnemySpeedIncrease = .1f;
 
     int levelEnemiesLeftToSpawn;
     int levelEnemiesToSpawn;
@@ -58,11 +58,14 @@ public class LevelControl : MonoBehaviour {
     float levelEnemyMaximumDamage;
     float levelEnemyMaximumSpeed;
 
+    //[Space(10)]
+    //[SerializeField]
+    //float spawnMapWidth;
+    //[SerializeField]
+    //float spawnMapHeight;
     [Space(10)]
     [SerializeField]
-    float spawnMapWidth;
-    [SerializeField]
-    float spawnMapHeight;
+    float spawnOffset = 1f;
 
     bool finishedSpawning = false;
     [SerializeField]
@@ -146,25 +149,16 @@ public class LevelControl : MonoBehaviour {
     {
         get
         {
-            return instance.spawnMapHeight;
+            return MapBoundariesControl.Height - instance.spawnOffset;
         }
 
-        set
-        {
-            instance.spawnMapHeight = value;
-        }
     }
 
     public static float SpawnMapWidth
     {
         get
         {
-            return instance.spawnMapWidth;
-        }
-
-        set
-        {
-            instance.spawnMapWidth = value;
+            return MapBoundariesControl.Width - instance.spawnOffset;
         }
     }
 
@@ -237,9 +231,9 @@ public class LevelControl : MonoBehaviour {
                     Instantiate(
                         spawnerPrefab,
                         new Vector3(
-                        Random.Range(-spawnMapWidth / 2, spawnMapWidth / 2),
+                        Random.Range(-SpawnMapWidth / 2, SpawnMapWidth / 2),
                         0,
-                        Random.Range(-spawnMapHeight / 2, spawnMapHeight / 2)
+                        Random.Range(-SpawnMapHeight / 2, SpawnMapHeight / 2)
                         ),
                         Quaternion.identity
                         ) as GameObject;

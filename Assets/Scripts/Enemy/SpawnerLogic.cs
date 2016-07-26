@@ -57,8 +57,7 @@ public class SpawnerLogic : MonoBehaviour {
                 {
                     --LevelControl.LevelEnemiesLeftToSpawn;
                     GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity) as GameObject;
-                    enemy.name = "Enemy #" + LevelControl.LevelEnemiesLeftToSpawn;
-                    enemy.GetComponent<EnemyLogic>().Init(color, damage, speed);
+                    enemy.name = "Enemy #" + LevelControl.LevelEnemiesLeftToSpawn;                    
                     if (bigEnemies)
                     {
                         enemy.transform.localScale = enemy.transform.localScale + 
@@ -69,6 +68,7 @@ public class SpawnerLogic : MonoBehaviour {
                         enemy.transform.localScale = enemy.transform.localScale -
                             new Vector3(enemyScaleDecrease, enemyScaleDecrease, enemyScaleDecrease);
                     }
+                    enemy.GetComponent<EnemyLogic>().Init(color, damage, speed);
                     ++enemiesSpawned;
                     finishedSpawning = enemiesSpawned == enemiesToSpawn;
                 }

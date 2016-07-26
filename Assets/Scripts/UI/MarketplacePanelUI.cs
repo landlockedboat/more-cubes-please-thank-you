@@ -9,6 +9,8 @@ public class MarketplacePanelUI : MonoBehaviour
     float statisticsPanelAnimationSpeed;
     [SerializeField]
     float upgradesPanelAnimationSpeed;
+    [SerializeField]
+    float upgradesLevelsPanelAnimationSpeed;
     bool finishedAppearing = false;
     bool finishedDissappearing = false;
 
@@ -17,13 +19,18 @@ public class MarketplacePanelUI : MonoBehaviour
     RectTransform upgradesPanel;
     [SerializeField]
     RectTransform statisticsPanel;
+    [SerializeField]
+    RectTransform upgradesLevelsPanel;
 
     [Space(10)]
     [SerializeField]
     Vector3 upgradesPanelFinalPos;
     [SerializeField]
     Vector3 statisticsPanelFinalPos;
+    [SerializeField]
+    Vector3 upgradesLevelsPanelFinalPos;
 
+    Vector3 upgradesLevelsPanelStartingPos;
     Vector3 upgradesPanelStartingPos;
     Vector3 statisticsPanelStartingPos;
 
@@ -43,6 +50,7 @@ public class MarketplacePanelUI : MonoBehaviour
     {
         upgradesPanelStartingPos = upgradesPanel.anchoredPosition;
         statisticsPanelStartingPos = statisticsPanel.anchoredPosition;
+        upgradesLevelsPanelStartingPos = upgradesLevelsPanel.anchoredPosition;
         finishedAppearing = false;
         StartCoroutine("AnimateMarketplace");
     }
@@ -66,7 +74,11 @@ public class MarketplacePanelUI : MonoBehaviour
                 statisticsPanel.anchoredPosition,
                 statisticsPanelFinalPos,
                 statisticsPanelAnimationSpeed * Time.deltaTime);
-            if(upgradesPanel.anchoredPosition.y == upgradesPanelFinalPos.y &&
+            upgradesLevelsPanel.anchoredPosition = Vector3.MoveTowards(
+                upgradesLevelsPanel.anchoredPosition,
+                upgradesLevelsPanelFinalPos,
+                upgradesLevelsPanelAnimationSpeed * Time.deltaTime);
+            if (upgradesPanel.anchoredPosition.y == upgradesPanelFinalPos.y &&
                  statisticsPanel.anchoredPosition.y == statisticsPanelFinalPos.y)
             {
                 finishedAppearing = true;
@@ -87,6 +99,10 @@ public class MarketplacePanelUI : MonoBehaviour
                 statisticsPanel.anchoredPosition,
                 statisticsPanelStartingPos,
                 statisticsPanelAnimationSpeed * Time.deltaTime);
+            upgradesLevelsPanel.anchoredPosition = Vector3.MoveTowards(
+                upgradesLevelsPanel.anchoredPosition,
+                upgradesLevelsPanelStartingPos,
+                upgradesLevelsPanelAnimationSpeed * Time.deltaTime);
             if (upgradesPanel.anchoredPosition.y == upgradesPanelStartingPos.y &&
                  statisticsPanel.anchoredPosition.y == statisticsPanelStartingPos.y)
             {

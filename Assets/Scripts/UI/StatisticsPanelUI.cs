@@ -6,7 +6,7 @@ using System;
 public class StatisticsPanelUI : MonoBehaviour
 {
     [SerializeField]
-    int charSize = 32;
+    float charSize = 32;
     [SerializeField]
     float animationSpeed = 6;
     [SerializeField]

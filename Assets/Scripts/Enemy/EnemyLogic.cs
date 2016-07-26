@@ -94,11 +94,11 @@ public class EnemyLogic : MonoBehaviour {
                     if (Random.Range(0f,1f) < OptimisationControl.ParticleSpawnChance())
                     {
                         ++OptimisationControl.CurrentParticlesInscene;
-                        GameObject point =
-                    Instantiate(pointPrefab,
-                        transform.position + new Vector3(i * .5f, j * .5f, k * .5f),
-                        transform.localRotation) as GameObject;
-                        point.GetComponent<PointLogic>().Init(explosionPos, isMissile);
+                        GameObject point = 
+                            SimplePool.Spawn(pointPrefab,
+                            transform.position + new Vector3(i * .5f, j * .5f, k * .5f),
+                            transform.localRotation);                        
+                        point.GetComponent<EnemyParticleLogic>().StartExplosion(explosionPos, isMissile);
                         point.GetComponent<MeshRenderer>().material.color = thisColor;
                     }
 

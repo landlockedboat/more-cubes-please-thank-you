@@ -12,6 +12,7 @@ public class CameraController : MonoBehaviour {
     float aspectRatio;
     [SerializeField]
     GameObject map;
+    [SerializeField]
     float magicalScaleConstant = .05f;
     Transform mainCamera;
     static bool isGrowing = false;
@@ -46,9 +47,7 @@ public class CameraController : MonoBehaviour {
             Vector3 newHeight = new Vector3(0, mainCamera.position.y + growDelta, 0);
             if (newHeight.y < maxHeight)
             {
-                map.transform.localScale += new Vector3(growDelta * magicalScaleConstant, 0, growDelta * magicalScaleConstant);
-                LevelControl.SpawnMapHeight += growDelta * magicalScaleConstant;
-                LevelControl.SpawnMapWidth += growDelta * magicalScaleConstant;
+                map.transform.localScale += new Vector3(growDelta * magicalScaleConstant, 0, growDelta * magicalScaleConstant);                
                 bool finishedLerping = false;
                 while (!finishedLerping)
                 {

@@ -175,7 +175,6 @@ public class SpecialLevelControl : MonoBehaviour {
     {
         specialLevelText.gameObject.SetActive(true);
         specialLevelText.text = specialLevelString;
-        specialLevelText.GetComponent<ShrinkAndMove>().Animate();
     }
         
     enum SpecialLevel

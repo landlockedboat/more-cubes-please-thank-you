@@ -16,9 +16,7 @@ public class EventManager : MonoBehaviour
         {
             if (!eventManager)
             {
-                //may not work this way, i've simplified it
                 eventManager = FindObjectOfType<EventManager>();
-                //eventManager = FindObjectOfType(typeof(EventManager)) as EventManager
                 if (!eventManager)
                 {
                     Debug.LogError("There needs to be one active EventManger script on a GameObject in your scene.");
@@ -77,7 +75,7 @@ public class EventManager : MonoBehaviour
 
     public enum EventType {
         OnBulletKill, OnLevelChanged, OnGameOver, OnScoreChanged, OnMultiplierChanged, OnUpgradesShown, OnEnemyKilled,
-        OnGamePaused, OnGameResumed, OnUpgradesHidden
+        OnGamePaused, OnGameResumed, OnUpgradesHidden, OnParticleClock
     }
 
 }
