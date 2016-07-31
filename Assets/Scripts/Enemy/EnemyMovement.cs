@@ -1,18 +1,43 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-public class EnemyMovement : MonoBehaviour {
-    [SerializeField]
+[RequireComponent(typeof(NavMeshAgent))]
+public class EnemyMovement : MonoBehaviour
+{
     NavMeshAgent navMeshAgent;
     Vector3 prevPlayerPos;
+    bool isGameOver = false;
 
-    // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public void Init(float speed)
+    {
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.speed = speed;
+        navMeshAgent.acceleration = speed / 1.1f;
+        prevPlayerPos = PlayerMovement.Pos;
+        navMeshAgent.SetDestination(prevPlayerPos);
+    }
+
+    void Update()
+    {
+        if (isGameOver)
+            return;
+        Vector3 playerPos = PlayerMovement.Pos;
+        if (playerPos != prevPlayerPos)
+        {
+            navMeshAgent.SetDestination(playerPos);
+            prevPlayerPos = playerPos;
+        }
+    }
+    void OnEnable()
+    {
+        EventManager.StartListening(EventManager.EventType.OnGameOver, OnGameOver);
+    }
+    void OnDisable()
+    {
+        EventManager.StopListening(EventManager.EventType.OnGameOver, OnGameOver);
+    }
+
+    void OnGameOver()
+    {
+        isGameOver = true;
+    }
 }

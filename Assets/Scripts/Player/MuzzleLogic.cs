@@ -55,7 +55,7 @@ public class MuzzleLogic : MonoBehaviour {
         }
     }
 
-    void Start()
+    void Awake()
     {
         muzzles = new Dictionary<Transform, Quaternion>();
         audioSource = GetComponent<AudioSource>();

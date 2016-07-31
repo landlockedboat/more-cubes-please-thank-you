@@ -14,7 +14,7 @@ GameObject:
   - 114: {fileID: 11417438}
   - 54: {fileID: 5403108}
   m_Layer: 8
-  m_Name: Point
+  m_Name: EnemyFragment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

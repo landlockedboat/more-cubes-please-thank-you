@@ -30,7 +30,7 @@ public class MissileLogic : BulletLogic
             foreach (Collider c in Physics.OverlapSphere(transform.position, explosionRadius))
             {
                 if (c.tag == "Enemy")
-                    c.GetComponent<EnemyLogic>().Kill(transform.position, true);
+                    c.GetComponent<EnemyDeath>().Kill(transform.position, true);
             }
             Destroy(gameObject);
         }

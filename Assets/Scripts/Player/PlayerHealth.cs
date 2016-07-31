@@ -99,6 +99,7 @@ public class PlayerHealth : MonoBehaviour
     //COULD BE PROBLEMATIC
     void Start() {
         CurrentHealth = maxHealth;
+        DontDestroyOnLoad(gameObject);
     }
 
     void OnEnable()

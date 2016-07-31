@@ -8,6 +8,8 @@ public abstract class AnimateUI : MonoBehaviour {
     float timeToStart = 1f;
     [SerializeField]
     float duration = 3f;
+    [SerializeField]
+    bool executeOnEnable = true;
     float currentTime;
 
     public float TimeToStart
@@ -44,6 +46,8 @@ public abstract class AnimateUI : MonoBehaviour {
     }
 
 	void OnEnable () {
+        if (!executeOnEnable)
+            return;
         StartAnimation();
     }
 

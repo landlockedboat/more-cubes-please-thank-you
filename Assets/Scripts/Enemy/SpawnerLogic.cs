@@ -68,7 +68,9 @@ public class SpawnerLogic : MonoBehaviour {
                         enemy.transform.localScale = enemy.transform.localScale -
                             new Vector3(enemyScaleDecrease, enemyScaleDecrease, enemyScaleDecrease);
                     }
-                    enemy.GetComponent<EnemyLogic>().Init(color, damage, speed);
+                    enemy.GetComponent<EnemyDeath>().Init(damage);
+                    enemy.transform.GetChild(0).GetComponent<EnemyGeomLogic>().Init(color);
+                    enemy.GetComponent<EnemyMovement>().Init(speed);
                     ++enemiesSpawned;
                     finishedSpawning = enemiesSpawned == enemiesToSpawn;
                 }

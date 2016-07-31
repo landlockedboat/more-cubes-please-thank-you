@@ -58,11 +58,6 @@ public class LevelControl : MonoBehaviour {
     float levelEnemyMaximumDamage;
     float levelEnemyMaximumSpeed;
 
-    //[Space(10)]
-    //[SerializeField]
-    //float spawnMapWidth;
-    //[SerializeField]
-    //float spawnMapHeight;
     [Space(10)]
     [SerializeField]
     float spawnOffset = 1f;
@@ -77,6 +72,9 @@ public class LevelControl : MonoBehaviour {
     int levelsUntilUpgrade = 5;
 
     bool isGamePaused = false;
+
+    [SerializeField]
+    GameObject playerPrefab;
 
 
     static LevelControl levelControl;
@@ -212,6 +210,20 @@ public class LevelControl : MonoBehaviour {
     {
         instance.levelEnemyMinimumSpeed = baseEnemySpeed;
         instance.levelEnemyMinimumDamage = baseEnemyDamage;
+
+        if (GameObject.FindGameObjectsWithTag("Player").Length == 0)
+        {
+            if(TutorialControl.TutPlayPos != Vector3.zero)
+            {
+                Instantiate(playerPrefab, TutorialControl.TutPlayPos, 
+                    TutorialControl.TutPlayRot);
+            }
+            else
+            {
+                Instantiate(playerPrefab, new Vector3(0, 0, -3), Quaternion.identity);
+            }
+        }
+            
     
         LevelChanged();
         StartCoroutine("InitSpawners");

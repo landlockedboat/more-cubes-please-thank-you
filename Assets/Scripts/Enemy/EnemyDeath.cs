@@ -1,16 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyLogic : MonoBehaviour {
+public class EnemyDeath : MonoBehaviour
+{
     [SerializeField]
-    NavMeshAgent navMeshAgent;
-    Vector3 prevPlayerPos;
-    bool isGameOver = false;
-    float damage = 5f;
+    int scoreWorth = 5;
     [SerializeField]
-    GameObject pointPrefab;
+    GameObject enemyFragmentPrefab;
 
-    [Header("Sound")]
+    [Header("Dying sound")]
     [SerializeField]
     GameObject soundPlayerPrefab;
     [SerializeField]
@@ -19,39 +17,17 @@ public class EnemyLogic : MonoBehaviour {
     [SerializeField]
     float volume = .25f;
 
-    [Space(10)]
-    [SerializeField]
-    MeshRenderer meshRenderer;
     bool isKilledBecauseEndOfLevel = false;
-    [SerializeField]
-    int scoreWorth = 5;
-    bool omaeWaMouShindeiru = false;
+    float damage = 5f;
+    bool alreadyDead = false;
 
-    public void Init (Color color, float damage, float speed) {
+    public void Init(float damage)
+    {
         this.damage = damage;
-        meshRenderer.material.color = color;
-        navMeshAgent.speed = speed;
-        //hardcoded because i can
-        navMeshAgent.acceleration = speed / 1.1f;
-        prevPlayerPos = PlayerMovement.Pos;
-        navMeshAgent.SetDestination(prevPlayerPos);
-        StartCoroutine("Grow");
     }
 
-    // Update is called once per frame
-    void Update () {
-        if (isGameOver)
-            return;
-        Vector3 playerPos = PlayerMovement.Pos;
-        if (playerPos != prevPlayerPos)
-        {
-            navMeshAgent.SetDestination(playerPos);
-            prevPlayerPos = playerPos;
-        }
-	}
-
-
-    void OnTriggerEnter(Collider col) {
+    void OnTriggerEnter(Collider col)
+    {
         if (col.gameObject.tag == "Bullet")
         {
             col.SendMessage("EnemyHit");
@@ -68,20 +44,21 @@ public class EnemyLogic : MonoBehaviour {
             }
             Kill(col.transform.position, false);
         }
-        if(col.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Player")
         {
             PlayerHealth.CurrentHealth -= damage;
             Kill(col.transform.position, false);
         }
-
     }
 
-    void Kill() {
+    void Kill()
+    {
         isKilledBecauseEndOfLevel = true;
         Kill(transform.position, false);
     }
 
-    public void Kill(Vector3 explosionPos, bool isMissile) {        
+    public void Kill(Vector3 explosionPos, bool isMissile)
+    {
         ScoreControl.CurrentScore += scoreWorth;
         Color thisColor = transform.GetChild(0).GetComponent<MeshRenderer>().material.color;
         //hardcoded because i can
@@ -91,27 +68,27 @@ public class EnemyLogic : MonoBehaviour {
             {
                 for (int k = -1; k < 2; k++)
                 {
-                    if (Random.Range(0f,1f) < OptimisationControl.ParticleSpawnChance())
+                    if (Random.Range(0f, 1f) < OptimisationControl.ParticleSpawnChance())
                     {
                         ++OptimisationControl.CurrentParticlesInscene;
-                        GameObject point = 
-                            SimplePool.Spawn(pointPrefab,
+                        GameObject point =
+                            SimplePool.Spawn(enemyFragmentPrefab,
                             transform.position + new Vector3(i * .5f, j * .5f, k * .5f),
-                            transform.localRotation);                        
+                            transform.localRotation);
                         point.GetComponent<EnemyParticleLogic>().StartExplosion(explosionPos, isMissile);
                         point.GetComponent<MeshRenderer>().material.color = thisColor;
                     }
 
                 }
             }
-                            
+
         }
-        if (!isMissile && !omaeWaMouShindeiru)        
+        if (!isMissile && !alreadyDead)
             PlayDeadSound();
-        
-        if (!isKilledBecauseEndOfLevel && !omaeWaMouShindeiru)
+
+        if (!isKilledBecauseEndOfLevel && !alreadyDead)
         {
-            omaeWaMouShindeiru = true;
+            alreadyDead = true;
             EventManager.TriggerEvent(EventManager.EventType.OnEnemyKilled);
         }
         if (isMissile)
@@ -128,37 +105,16 @@ public class EnemyLogic : MonoBehaviour {
         Instantiate(soundPlayerPrefab, transform.position, Quaternion.identity) as GameObject;
         SoundPlayerLogic spl = soundPlayer.GetComponent<SoundPlayerLogic>();
         spl.AudioClip = deathSound;
-        spl.Volume = volume;        
+        spl.Volume = volume;
     }
 
     void OnEnable()
     {
-        EventManager.StartListening(EventManager.EventType.OnGameOver, OnGameOver);
         EventManager.StartListening(EventManager.EventType.OnLevelChanged, Kill);
     }
 
-    void OnDisable() {
-        EventManager.StopListening(EventManager.EventType.OnGameOver, OnGameOver);
+    void OnDisable()
+    {
         EventManager.StopListening(EventManager.EventType.OnLevelChanged, Kill);
-
-    }
-
-    void OnGameOver() {
-        isGameOver = true;
-    }
-
-    IEnumerator Grow() {
-        float OGScale = transform.localScale.x;
-        transform.localScale = new Vector3(.01f, .01f, .01f);
-        float growSpeed = SpawnerControl.EnemyGrowingSpeed;
-        bool finished = false;
-        while (!finished)
-        {
-            float growDelta = growSpeed * Time.deltaTime;
-            transform.localScale += new Vector3(growDelta, growDelta, growDelta);
-            if (transform.localScale.x >= OGScale)
-                finished = true;
-            yield return null;
-        }
     }
 }
