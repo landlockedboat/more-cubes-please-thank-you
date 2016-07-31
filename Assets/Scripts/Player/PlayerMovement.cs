@@ -10,14 +10,41 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float speedPercentageIncrease = .05f;
     new Rigidbody rigidbody;
-    static Vector3 pos;
     float deltaSpeed;
+
+    static PlayerMovement playerMovement;
+
+    public static PlayerMovement instance
+    {
+        get
+        {
+            if (!playerMovement)
+            {
+                playerMovement = FindObjectOfType<PlayerMovement>();
+                if (!playerMovement)
+                {
+                    Debug.LogError("There needs to be one active PlayerMovement script on a GameObject in your scene.");
+                }
+                else
+                {
+                    playerMovement.Init();
+                }
+            }
+
+            return playerMovement;
+        }
+    }
+
+    void Init()
+    {
+
+    }
 
     public static Vector3 Pos
     {
         get
         {
-            return pos;
+            return instance.transform.position;
         }
     }
 
@@ -36,14 +63,11 @@ public class PlayerMovement : MonoBehaviour
         speed *= 1 + speedPercentageIncrease;
     }
 
-    // Use this for initialization
     void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
-        pos = transform.position;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         deltaSpeed = speed * Time.fixedDeltaTime;
@@ -56,6 +80,5 @@ public class PlayerMovement : MonoBehaviour
                 deltaSpeed * Input.GetAxis("Vertical")
                 )
             );
-        pos = transform.position;
     }
 }

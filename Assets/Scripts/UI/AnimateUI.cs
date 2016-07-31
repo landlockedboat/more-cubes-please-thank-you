@@ -10,6 +10,32 @@ public abstract class AnimateUI : MonoBehaviour {
     float duration = 3f;
     float currentTime;
 
+    public float TimeToStart
+    {
+        get
+        {
+            return timeToStart;
+        }
+
+        set
+        {
+            timeToStart = value;
+        }
+    }
+
+    public float Duration
+    {
+        get
+        {
+            return duration;
+        }
+
+        set
+        {
+            duration = value;
+        }
+    }
+
     public void StartAnimation()
     {
         StopCoroutine("Animate");
