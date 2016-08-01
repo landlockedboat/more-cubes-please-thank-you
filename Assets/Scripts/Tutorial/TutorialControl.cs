@@ -13,15 +13,24 @@ public class TutorialControl: MonoBehaviour {
     [SerializeField]
     string missilesTutText;
     [SerializeField]
+    string congratsText;
+    [SerializeField]
     Text tutorialText;
+    [SerializeField]
+    Text goText;
 
     static Quaternion tutPlayRot;
     static Vector3 tutPlayPos = Vector3.zero;
 
     TutState tutState = TutState.MoveTut;
-    FadeTextUI fadeText;
+    [SerializeField]
+    FadeTextUI tutorialTextFadeText;
+    [SerializeField]
+    FadeTextUI goTextFadeText;
 
     [Header("Final countdown")]
+    [SerializeField]
+    float congratsTimer = 1f;
     [SerializeField]
     float timeBetweenNumbers = 1f;
     int currentNumber = 3;
@@ -49,32 +58,19 @@ public class TutorialControl: MonoBehaviour {
     }
 
     enum TutState {
-        MoveTut, BulletsTut, MissilesTut
+        MoveTut, BulletsTut, MissilesTut, Congrats
     }
 
-    void UpdateText()
+    void UpdateText(string text)
     {
-        switch (tutState)
-        {
-            case TutState.MoveTut:
-                tutorialText.text = moveTutText;
-                break;
-            case TutState.BulletsTut:
-                tutorialText.text = bulletsTutText;
-                break;
-            case TutState.MissilesTut:
-                tutorialText.text = missilesTutText;
-                break;
-            default:
-                break;
-        }
-        fadeText.StartAnimation();
+        tutorialText.text = text;
+        tutorialTextFadeText.StartAnimation();
     }
 
     void Start()
     {
-        fadeText = GetComponent<FadeTextUI>();
-        UpdateText();
+        tutorialTextFadeText = GetComponent<FadeTextUI>();
+        UpdateText(moveTutText);
     }
 
     void Update()
@@ -84,20 +80,22 @@ public class TutorialControl: MonoBehaviour {
             case TutState.MoveTut:
                 if(Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
                 {
+                    StartCoroutine("UpdateState", TutState.BulletsTut);
                     tutState = TutState.BulletsTut;
-                    UpdateText();
+                    UpdateText(bulletsTutText);
                 }
                 break;
             case TutState.BulletsTut:
                 if (Input.GetMouseButtonDown(0))
                 {
                     tutState = TutState.MissilesTut;
-                    UpdateText();
+                    UpdateText(missilesTutText);
                 }
                 break;
             case TutState.MissilesTut:
                 if (Input.GetMouseButtonDown(1))
                 {
+                    UpdateText(congratsText);
                     StartCoroutine("Countdown");
                 }
                 break;
@@ -106,24 +104,31 @@ public class TutorialControl: MonoBehaviour {
         }
     }
 
+    IEnumerator UpdateState()
+    {
+        return null;
+    }
+
     IEnumerator Countdown()
     {
+        yield return new WaitForSeconds(congratsTimer);
+        tutorialText.text = "";
         while(currentNumber > 0)
         {
-            tutorialText.text = currentNumber.ToString();
-            fadeText.StartAnimation();
+            goText.text = currentNumber.ToString();
+            goTextFadeText.StartAnimation();
             yield return new WaitForSeconds(timeBetweenNumbers);
             --currentNumber;
         }
-        tutorialText.text = "GO!";
-        fadeText.StartAnimation();
+        goText.text = "GO!";
+        goTextFadeText.StartAnimation();
         yield return new WaitForSeconds(timeBetweenNumbers / 2);
         fadeImage.GetComponent<FadeImageUI>().StartAnimation();
         yield return new WaitForSeconds(fadeImageDuration);
         tutPlayRot = playerInTutorial.transform.localRotation;
         tutPlayPos = playerInTutorial.transform.position;
         Destroy(playerInTutorial);
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("game");
     }
 
 }

@@ -18,21 +18,16 @@ public class MarketplacePanelUI : MonoBehaviour
     [SerializeField]
     RectTransform upgradesPanel;
     [SerializeField]
-    RectTransform statisticsPanel;
-    [SerializeField]
     RectTransform upgradesLevelsPanel;
 
     [Space(10)]
     [SerializeField]
     Vector3 upgradesPanelFinalPos;
     [SerializeField]
-    Vector3 statisticsPanelFinalPos;
-    [SerializeField]
     Vector3 upgradesLevelsPanelFinalPos;
 
     Vector3 upgradesLevelsPanelStartingPos;
     Vector3 upgradesPanelStartingPos;
-    Vector3 statisticsPanelStartingPos;
 
     void OnEnable()
     {
@@ -49,7 +44,6 @@ public class MarketplacePanelUI : MonoBehaviour
     void OnUpgradesShown()
     {
         upgradesPanelStartingPos = upgradesPanel.anchoredPosition;
-        statisticsPanelStartingPos = statisticsPanel.anchoredPosition;
         upgradesLevelsPanelStartingPos = upgradesLevelsPanel.anchoredPosition;
         finishedAppearing = false;
         StartCoroutine("AnimateMarketplace");
@@ -70,16 +64,11 @@ public class MarketplacePanelUI : MonoBehaviour
                 upgradesPanel.anchoredPosition,
                 upgradesPanelFinalPos,
                 upgradesPanelAnimationSpeed * Time.deltaTime);
-            statisticsPanel.anchoredPosition = Vector3.MoveTowards(
-                statisticsPanel.anchoredPosition,
-                statisticsPanelFinalPos,
-                statisticsPanelAnimationSpeed * Time.deltaTime);
             upgradesLevelsPanel.anchoredPosition = Vector3.MoveTowards(
                 upgradesLevelsPanel.anchoredPosition,
                 upgradesLevelsPanelFinalPos,
                 upgradesLevelsPanelAnimationSpeed * Time.deltaTime);
-            if (upgradesPanel.anchoredPosition.y == upgradesPanelFinalPos.y &&
-                 statisticsPanel.anchoredPosition.y == statisticsPanelFinalPos.y)
+            if (upgradesPanel.anchoredPosition.y == upgradesPanelFinalPos.y)
             {
                 finishedAppearing = true;
             }
@@ -94,17 +83,12 @@ public class MarketplacePanelUI : MonoBehaviour
             upgradesPanel.anchoredPosition = Vector3.MoveTowards(
                 upgradesPanel.anchoredPosition,
                 upgradesPanelStartingPos,
-                upgradesPanelAnimationSpeed * Time.deltaTime);
-            statisticsPanel.anchoredPosition = Vector3.MoveTowards(
-                statisticsPanel.anchoredPosition,
-                statisticsPanelStartingPos,
-                statisticsPanelAnimationSpeed * Time.deltaTime);
+                upgradesPanelAnimationSpeed * Time.deltaTime);            
             upgradesLevelsPanel.anchoredPosition = Vector3.MoveTowards(
                 upgradesLevelsPanel.anchoredPosition,
                 upgradesLevelsPanelStartingPos,
                 upgradesLevelsPanelAnimationSpeed * Time.deltaTime);
-            if (upgradesPanel.anchoredPosition.y == upgradesPanelStartingPos.y &&
-                 statisticsPanel.anchoredPosition.y == statisticsPanelStartingPos.y)
+            if (upgradesPanel.anchoredPosition.y == upgradesPanelStartingPos.y)
             {
                 finishedDissappearing = true;
                 EventManager.TriggerEvent(EventManager.EventType.OnGameResumed);

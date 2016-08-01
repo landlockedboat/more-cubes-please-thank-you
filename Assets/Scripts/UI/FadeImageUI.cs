@@ -6,8 +6,10 @@ using System.Collections;
 public class FadeImageUI : AnimateUI {
 
     [Header("Fade")]
+    [Range(0,1)]
     [SerializeField]
     float startingAlpha = 0f;
+    [Range(0, 1)]
     [SerializeField]
     float finalAlpha = 1f;
     [SerializeField]
