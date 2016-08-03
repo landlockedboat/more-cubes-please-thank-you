@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public abstract class AnimateUI : MonoBehaviour {
 
@@ -10,7 +11,9 @@ public abstract class AnimateUI : MonoBehaviour {
     float duration = 3f;
     [SerializeField]
     bool executeOnEnable = true;
+
     float currentTime;
+
 
     public float TimeToStart
     {

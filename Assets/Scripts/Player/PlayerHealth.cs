@@ -67,6 +67,8 @@ public class PlayerHealth : MonoBehaviour
 
         set
         {
+            if (instance.currentHealth > value)
+                EventManager.TriggerEvent(EventManager.EventType.OnPlayerHurt);
             instance.currentHealth = value;
             Color currentColor =
             Color.Lerp(instance.healthyColor, instance.hurtColor,

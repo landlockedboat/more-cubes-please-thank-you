@@ -44,6 +44,8 @@ public class PlayerMovement : MonoBehaviour
     {
         get
         {
+            if (!playerMovement)
+                return Vector3.down;
             return instance.transform.position;
         }
     }
@@ -66,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
     void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
+        playerMovement = this;
     }
 
     void FixedUpdate()

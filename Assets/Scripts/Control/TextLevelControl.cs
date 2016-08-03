@@ -4,6 +4,13 @@ using System.Collections;
 
 public class TextLevelControl : MonoBehaviour{
     Text levelText;
+    [SerializeField]
+    AnimateUI moveUI;
+    [SerializeField]
+    AnimateUI scaleUI;
+    [SerializeField]
+    AudioSource audioSource;
+
 
     void Start () {
         levelText = GetComponent<Text>();
@@ -20,7 +27,8 @@ public class TextLevelControl : MonoBehaviour{
 
     void UpdateLevelText() {
         levelText.text = "Level " + LevelControl.CurrentLevel;
-        gameObject.SetActive(false);
-        gameObject.SetActive(true);
+        moveUI.StartAnimation();
+        scaleUI.StartAnimation();
+        audioSource.Play();
     }
 }

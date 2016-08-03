@@ -6,6 +6,8 @@ public class MenuUI : MonoBehaviour {
     [SerializeField]
     FadeImageUI fadeImage;
     [SerializeField]
+    FadeAudioSource fadeAudioSource;
+    [SerializeField]
     float timeToFade;
     bool changing = false;
 
@@ -30,6 +32,7 @@ public class MenuUI : MonoBehaviour {
     IEnumerator FadeAndChange(string scene)
     {
         fadeImage.StartAnimation();
+        fadeAudioSource.FadeSound(1f, 0, 1);
         yield return new WaitForSeconds(timeToFade);
         SceneManager.LoadScene(scene);
     }

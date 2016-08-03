@@ -21,7 +21,7 @@ public class EnemyMovement : MonoBehaviour
         if (isGameOver)
             return;
         Vector3 playerPos = PlayerMovement.Pos;
-        if (playerPos != prevPlayerPos)
+        if (playerPos != prevPlayerPos && playerPos != Vector3.down)
         {
             navMeshAgent.SetDestination(playerPos);
             prevPlayerPos = playerPos;
