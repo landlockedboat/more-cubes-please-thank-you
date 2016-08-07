@@ -409,6 +409,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   speedPercentageIncrease: 0.03
+  movementOffset: 20
 --- !u!212 &21284770
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour
+{
     [SerializeField]
     float growSpeed;
     [SerializeField]
@@ -14,50 +15,47 @@ public class CameraController : MonoBehaviour {
     GameObject map;
     [SerializeField]
     float magicalScaleConstant = .05f;
-    Transform mainCamera;
-    static bool isGrowing = false;
 
-    static public bool IsGrowing
+    Vector3 newHeight;
+
+    void OnEnable()
     {
-        get
-        {
-            return isGrowing;
-        }
+        EventManager.StartListening(EventManager.EventType.OnLevelChanged, OnLevelChanged);
+    }
 
-        set
+    void OnDisable()
+    {
+        EventManager.StopListening(EventManager.EventType.OnLevelChanged, OnLevelChanged);
+    }
+
+    void Start()
+    {
+        newHeight = transform.position;
+    }
+
+    void OnLevelChanged()
+    {
+        if (transform.position.y < maxHeight)
         {
-            isGrowing = value;
+            StopAllCoroutines();
+            transform.position = newHeight;
+            StartCoroutine("Grow");
         }
     }
 
-    // Use this for initialization
-    void Start () {
-        mainCamera = Camera.main.transform;
-        StartCoroutine("Grow");
-	}
 
-
-    IEnumerator Grow() {
-        while (true)
-        {            
-            while (!isGrowing)
-            {
-                yield return new WaitForSeconds(.5f);
-            }            
-            Vector3 newHeight = new Vector3(0, mainCamera.position.y + growDelta, 0);
-            if (newHeight.y < maxHeight)
-            {
-                map.transform.localScale += new Vector3(growDelta * magicalScaleConstant, 0, growDelta * magicalScaleConstant);                
-                bool finishedLerping = false;
-                while (!finishedLerping)
-                {
-                    mainCamera.position = Vector3.MoveTowards(mainCamera.position, newHeight, growSpeed * Time.deltaTime);
-                    if (mainCamera.position.y == newHeight.y)
-                        finishedLerping = true;
-                    yield return null;
-                }
-            }
-            isGrowing = false;
+    IEnumerator Grow()
+    {
+        newHeight = new Vector3(0, transform.position.y + growDelta, 0);
+        //map.transform.localScale *= magicalScaleConstant;
+        bool finished = false;
+        while (!finished)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, newHeight,
+                growSpeed * Time.deltaTime);
+            if (transform.position.y >= newHeight.y)
+                finished = true;
+            yield return null;
         }
     }
 }

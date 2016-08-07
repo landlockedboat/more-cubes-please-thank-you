@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23f95651f8f411248bae814726e30e86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ticksToDie: 100
+  ticksToDie: 75
   deltaTicksToDie: 25
   shrinkingRate: 1
   startingScale: {x: 0.4, y: 0.4, z: 0.4}

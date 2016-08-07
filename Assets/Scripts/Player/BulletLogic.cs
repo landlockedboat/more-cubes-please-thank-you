@@ -30,8 +30,13 @@ public class BulletLogic : MonoBehaviour {
     }
 
     void Update () {
-        transform.Translate(new Vector3(0, 0, speed * Time.deltaTime));
+        Move();
 	}
+
+    protected virtual void Move()
+    {
+        transform.Translate(new Vector3(0, 0, speed * Time.deltaTime));
+    }
 
     public void EnemyHit()
     {        

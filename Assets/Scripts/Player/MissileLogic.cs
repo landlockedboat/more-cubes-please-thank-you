@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MissileLogic : BulletLogic
+public class MissileLogic : MonoBehaviour
 {
     [SerializeField]
     float explosionRadius;
@@ -59,9 +59,10 @@ public class MissileLogic : BulletLogic
         }
     }
 
+
+
     void Start()
     {
-        Init();
         StartCoroutine("SpawnParticles");
     }
 

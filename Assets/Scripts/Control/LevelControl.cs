@@ -147,7 +147,9 @@ public class LevelControl : MonoBehaviour {
     {
         get
         {
-            return MapBoundariesControl.Height - instance.spawnOffset;
+            float yBoundary = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.y)).z;
+            Debug.Log("yBoundary: " + yBoundary);
+            return yBoundary - instance.spawnOffset;
         }
 
     }
@@ -156,7 +158,9 @@ public class LevelControl : MonoBehaviour {
     {
         get
         {
-            return MapBoundariesControl.Width - instance.spawnOffset;
+            float xBoundary = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.y)).x;
+            Debug.Log("xBoundary: " + xBoundary);
+            return xBoundary - instance.spawnOffset;
         }
     }
 
@@ -283,8 +287,7 @@ public class LevelControl : MonoBehaviour {
         currentHue += levelDeltaHue;
         if (currentHue >= 1)
             currentHue = 0;
-        currentColor = Color.HSVToRGB(currentHue, 1, 1);
-        CameraController.IsGrowing = true;
+        currentColor = Color.HSVToRGB(currentHue, 1, 1);        
         instance.levelEnemiesKilled = 0;
         CalculateDamages();
         finishedSpawning = false;

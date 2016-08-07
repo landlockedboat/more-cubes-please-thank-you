@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MapBoundariesControl : MonoBehaviour {
+public class MapBoundariesControl : MonoBehaviour
+{
     static MapBoundariesControl mapBoundariesControl;
     [SerializeField]
     Transform rightBoundary;
@@ -34,7 +35,8 @@ public class MapBoundariesControl : MonoBehaviour {
 
     }
 
-    public static float Width {
+    public static float Width
+    {
         get
         {
             return instance.rightBoundary.position.x * 2;

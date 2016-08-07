@@ -13,6 +13,8 @@ GameObject:
   - 54: {fileID: 5443224}
   - 23: {fileID: 2363622}
   - 114: {fileID: 11408810}
+  - 114: {fileID: 11429198}
+  - 195: {fileID: 19544720}
   m_Layer: 0
   m_Name: Missile
   m_TagString: Untagged
@@ -28,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 162112}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
@@ -46,7 +48,7 @@ MeshRenderer:
   - {fileID: 2100000, guid: a8a0fecd0a44c9147bda914cf6cf1330, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
+  m_UseLightProbes: 0
   m_ReflectionProbeUsage: 1
   m_ProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
@@ -112,6 +114,39 @@ MonoBehaviour:
     type: 2}
   explosionSoundPrefab: {fileID: 183094, guid: f017cb542ec28074fa964606efaeae41, type: 2}
   explosionAudioClip: {fileID: 8300000, guid: 69fa6b442c65a6b439e66e75014fa7df, type: 3}
+--- !u!114 &11429198
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 162112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 731995c77c4210045a2335c5d7989968, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyLostRecalcTime: 0.2
+  timeTillStart: 0.5
+--- !u!195 &19544720
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 162112}
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Speed: 50
+  m_Acceleration: 25
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
