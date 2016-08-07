@@ -148,8 +148,7 @@ public class LevelControl : MonoBehaviour {
         get
         {
             float yBoundary = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.y)).z;
-            Debug.Log("yBoundary: " + yBoundary);
-            return yBoundary - instance.spawnOffset;
+            return yBoundary * 2 - instance.spawnOffset;
         }
 
     }
@@ -159,8 +158,8 @@ public class LevelControl : MonoBehaviour {
         get
         {
             float xBoundary = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.y)).x;
-            Debug.Log("xBoundary: " + xBoundary);
-            return xBoundary - instance.spawnOffset;
+
+            return xBoundary * 2 - instance.spawnOffset;
         }
     }
 

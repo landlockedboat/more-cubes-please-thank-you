@@ -31,7 +31,8 @@ public class SoundPlayerLogic : MonoBehaviour {
         AudioSource aus = GetComponent<AudioSource>();
         aus.clip = audioClip;
         aus.volume = volume;
-        aus.Play();
+        if(AudioSettingsControl.AudioOn)
+            aus.Play();
         StartCoroutine("Die");
     }
 

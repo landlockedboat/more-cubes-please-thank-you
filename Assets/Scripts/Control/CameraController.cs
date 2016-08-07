@@ -9,12 +9,7 @@ public class CameraController : MonoBehaviour
     float maxHeight;
     [SerializeField]
     float growDelta;
-    [SerializeField]
-    float aspectRatio;
-    [SerializeField]
-    GameObject map;
-    [SerializeField]
-    float magicalScaleConstant = .05f;
+
 
     Vector3 newHeight;
 

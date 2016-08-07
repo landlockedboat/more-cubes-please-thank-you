@@ -27,6 +27,7 @@ public class PlayerShooting : MonoBehaviour
     int currentMissiles = 0;
     float currentTime;
     bool canShootMissiles = true;
+    bool isPaused = false;
 
     static PlayerShooting playerShooting;
 
@@ -216,12 +217,26 @@ public class PlayerShooting : MonoBehaviour
     {
         EventManager.StartListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
         EventManager.StartListening(EventManager.EventType.OnUpgradesShown, OnUpgradesShown);
+        EventManager.StartListening(EventManager.EventType.OnGamePaused, OnGamePaused);
+        EventManager.StartListening(EventManager.EventType.OnGameResumed, OnGameResumed);
     }
 
     void OnDisable()
     {
         EventManager.StopListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
         EventManager.StopListening(EventManager.EventType.OnUpgradesShown, OnUpgradesShown);
+        EventManager.StopListening(EventManager.EventType.OnGamePaused, OnGamePaused);
+        EventManager.StopListening(EventManager.EventType.OnGameResumed, OnGameResumed);
+    }
+
+    void OnGamePaused()
+    {
+        instance.isPaused = true;
+    }
+
+    void OnGameResumed()
+    {
+        instance.isPaused = false;
     }
 
     void OnUpgradesShown()
@@ -244,6 +259,8 @@ public class PlayerShooting : MonoBehaviour
 
     void Update()
     {
+        if (isPaused)
+            return;
         Vector3 mouse = Input.mousePosition;
         mouse.z = Camera.main.transform.position.y - instance.playerGeom.position.y;
         playerGeom.LookAt(Camera.main.ScreenToWorldPoint(mouse));

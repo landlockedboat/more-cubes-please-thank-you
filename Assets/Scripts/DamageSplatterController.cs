@@ -25,6 +25,7 @@ public class DamageSplatterController : MonoBehaviour {
     void OnPlayerHurt()
     {
         fadeImage.StartAnimation();
-        audioSource.PlayOneShot(audioSource.clip);
+        if(AudioSettingsControl.AudioOn)
+            audioSource.PlayOneShot(audioSource.clip);
     }
 }

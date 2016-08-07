@@ -68,7 +68,8 @@ public class MissilesPanelUI : MonoBehaviour
             if (prevCurrentMissiles < instance.currentMissiles)
             {
                 instance.StartAnimation();
-                instance.audioSource.Play();
+                if(AudioSettingsControl.AudioOn)
+                    instance.audioSource.Play();
             }
         }
     }
@@ -80,7 +81,8 @@ public class MissilesPanelUI : MonoBehaviour
             instance.maxMissiles = value;
             UpdateMissilesUI();
             instance.StartAnimation();
-            instance.audioSource.Play();
+            if(AudioSettingsControl.AudioOn)
+                instance.audioSource.Play();
         }
     }
 

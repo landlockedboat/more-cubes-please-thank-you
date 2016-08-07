@@ -9,7 +9,8 @@ public class PlayAudioSourceOnEnable : MonoBehaviour {
     {
         if(!audioSource)
             audioSource = GetComponent<AudioSource>();
-        audioSource.Play();
+        if(AudioSettingsControl.AudioOn)
+            audioSource.Play();
     }
 
 

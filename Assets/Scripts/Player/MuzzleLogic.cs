@@ -91,7 +91,8 @@ public class MuzzleLogic : MonoBehaviour {
         float vol = Random.Range(minBulletVol, maxBulletVol);
         float pitch = Random.Range(minBulletPitch, maxBulletPitch);
         audioSource.pitch = pitch;
-        audioSource.PlayOneShot(bulletShootingSound, vol);
+        if(AudioSettingsControl.AudioOn)
+            audioSource.PlayOneShot(bulletShootingSound, vol);
     }
 
     public void ShootMissile()
@@ -100,7 +101,8 @@ public class MuzzleLogic : MonoBehaviour {
         float vol = Random.Range(minMissileVol, maxMissileVol);
         float pitch = Random.Range(minMissilePitch, maxMissilePitch);
         audioSource.pitch = pitch;
-        audioSource.PlayOneShot(missileShootingSound, vol);
+        if(AudioSettingsControl.AudioOn)
+            audioSource.PlayOneShot(missileShootingSound, vol);
     }
 
 

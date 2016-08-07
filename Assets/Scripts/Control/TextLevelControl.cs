@@ -29,6 +29,7 @@ public class TextLevelControl : MonoBehaviour{
         levelText.text = "Level " + LevelControl.CurrentLevel;
         moveUI.StartAnimation();
         scaleUI.StartAnimation();
-        audioSource.Play();
+        if(AudioSettingsControl.AudioOn)
+            audioSource.Play();
     }
 }

@@ -16,6 +16,7 @@ public class DelayAudioSource : MonoBehaviour {
     IEnumerator Delay()
     {
         yield return new WaitForSeconds(delay);
-        audioSource.Play();
+        if(AudioSettingsControl.AudioOn)
+            audioSource.Play();
     }
 }
