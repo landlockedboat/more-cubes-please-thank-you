@@ -68,7 +68,9 @@ public class PlayerHealth : MonoBehaviour
         set
         {
             if (instance.currentHealth > value)
+            {
                 EventManager.TriggerEvent(EventManager.EventType.OnPlayerHurt);
+            }               
             instance.currentHealth = value;
             Color currentColor =
             Color.Lerp(instance.healthyColor, instance.hurtColor,
@@ -80,6 +82,7 @@ public class PlayerHealth : MonoBehaviour
                 instance.currentHealth = 0;
                 HealthTextUI.SetText(instance.currentHealth.ToString("F2"));
                 EventManager.TriggerEvent(EventManager.EventType.OnGameOver);
+                EventManager.TriggerEvent(EventManager.EventType.OnSpawnPaused);
                 Destroy(instance.gameObject);
             }
         }
@@ -99,30 +102,37 @@ public class PlayerHealth : MonoBehaviour
     }
 
     //COULD BE PROBLEMATIC
+    //It was lul
     void Start() {
-        CurrentHealth = maxHealth;
-        DontDestroyOnLoad(gameObject);
+        CurrentHealth = maxHealth;        
     }
 
     void OnEnable()
     {
-        EventManager.StartListening(EventManager.EventType.OnUpgradesShown, OnUpgradesShown);
-        EventManager.StartListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
+        EventManager.StartListening(EventManager.EventType.OnUpgradesShown, OnUpgradesShown);        
+        EventManager.StartListening(EventManager.EventType.OnEnemyHealing, OnEnemyHealing);
     }
 
     void OnDisable()
     {
         EventManager.StopListening(EventManager.EventType.OnUpgradesShown, OnUpgradesShown);
-        EventManager.StopListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
+        EventManager.StopListening(EventManager.EventType.OnEnemyHealing, OnEnemyHealing);
     }
 
-    void OnEnemyKilled()
+    void OnEnemyHealing()
     {
         if(CurrentHealth < MaxHealth)
         {
-            CurrentHealth += healingPerEnemy;
-            if (CurrentHealth > MaxHealth)
-                CurrentHealth = MaxHealth;
+            float nextHealth = instance.currentHealth + healingPerEnemy;
+            if (nextHealth >= MaxHealth)
+            {
+                nextHealth = MaxHealth;
+            }
+            else
+            {
+                EventManager.TriggerEvent(EventManager.EventType.OnPlayerHealed);
+            }                
+            CurrentHealth = nextHealth;
             totalHealingDone += healingPerEnemy;
             StatisticsControl.SetStat(StatisticsControl.Stat.HealedLife, Mathf.RoundToInt(totalHealingDone));
         }

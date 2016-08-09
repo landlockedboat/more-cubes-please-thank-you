@@ -2,10 +2,10 @@
 using System.Collections;
 
 [RequireComponent(typeof(AudioSource))]
-public class PlayMusicOnAwake : MonoBehaviour {
+public class PlayMusicOnStart : MonoBehaviour {
     AudioSource audioSource;
 
-    void Awake () {
+    void Start () {
         audioSource = GetComponent<AudioSource>();
         if (AudioSettingsControl.MusicOn)
             audioSource.Play();
@@ -32,8 +32,4 @@ public class PlayMusicOnAwake : MonoBehaviour {
     {
         audioSource.Play();
     }
-
-    void Update () {
-	
-	}
 }

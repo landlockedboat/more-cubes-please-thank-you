@@ -19,12 +19,13 @@ public class EventManager : MonoBehaviour
                 eventManager = FindObjectOfType<EventManager>();
                 if (!eventManager)
                 {
-                    Debug.LogError("There needs to be one active EventManger script on a GameObject in your scene.");
+                    GameObject go = new GameObject();
+                    go.name = "EventManager";
+                    go.AddComponent<EventManager>();
+                    eventManager = FindObjectOfType<EventManager>();
+                    Debug.Log("EventManger script created on a GameObject in your scene.");
                 }
-                else
-                {
-                    eventManager.Init();
-                }
+                eventManager.Init();
             }
 
             return eventManager;
@@ -37,6 +38,7 @@ public class EventManager : MonoBehaviour
         {
             eventDictionary = new Dictionary<EventType, UnityEvent>();
         }
+        DontDestroyOnLoad(gameObject);
     }
 
     public static void StartListening(EventType eventType, UnityAction listener)
@@ -73,9 +75,11 @@ public class EventManager : MonoBehaviour
         }
     }
 
-    public enum EventType {
-        OnBulletKill, OnLevelChanged, OnGameOver, OnScoreChanged, OnMultiplierChanged, OnUpgradesShown, OnEnemyKilled,
-        OnGamePaused, OnGameResumed, OnUpgradesHidden, OnParticleClock, OnPlayerHurt, OnMusicMuted, OnMusicUnmuted
+    public enum EventType
+    {
+        OnBulletKill, OnLevelChanged, OnGameOver, OnScoreChanged, OnMultiplierChanged, OnUpgradesShown, OnEnemyKilled, OnEnemyHealing,
+        OnSpawnPaused, OnSpawnResumed, OnUpgradesHidden, OnParticleClock, OnPlayerHurt, OnPlayerHealed, OnMusicMuted, OnMusicUnmuted,
+        OnGamePaused, OnGameResumed
     }
 
 }

@@ -10,7 +10,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float speedPercentageIncrease = .05f;
     [SerializeField]
-    float movementOffset = 1f;
+    float upMovementOffset = 20f;
+    [SerializeField]
+    float downMovementOffset = 50f;
+    [SerializeField]
+    float rightMovementOffset = 20f;
+    [SerializeField]
+    float leftMovementOffset = 50f;
+
+    float referenceWidth = 960;
+    float referenceHeight = 600;
+
     new Rigidbody rigidbody;
     float deltaSpeed;
 
@@ -39,7 +49,18 @@ public class PlayerMovement : MonoBehaviour
 
     void Init()
     {
+        float widthDiff = Screen.width / referenceWidth;
+        float heightDiff = Screen.height / referenceHeight;
+        upMovementOffset *= heightDiff;
+        downMovementOffset *= heightDiff;
+        rightMovementOffset *= widthDiff;
+        leftMovementOffset *= widthDiff;
+        Debug.Log(Screen.width);
+    }
 
+    void Start()
+    {
+        instance.Init();
     }
 
     public static Vector3 Pos
@@ -80,22 +101,22 @@ public class PlayerMovement : MonoBehaviour
         float xMovement = Input.GetAxis("Horizontal");
         float yMovement = Input.GetAxis("Vertical");
         Vector3 playerScreenPos = Camera.main.WorldToScreenPoint(transform.position);
-        if (playerScreenPos.x + movementOffset >= Screen.width)
+        if (playerScreenPos.x + rightMovementOffset >= Screen.width)
         {
             if (xMovement > 0)
                 xMovement = 0;
         }
-        else if (playerScreenPos.x - movementOffset <= 0)
+        else if (playerScreenPos.x - leftMovementOffset <= 0)
         {
             if (xMovement < 0)
                 xMovement = 0;
         }
-        if(playerScreenPos.y + movementOffset >= Screen.height)
+        if(playerScreenPos.y + upMovementOffset >= Screen.height)
         {
             if (yMovement > 0)
                 yMovement = 0;
         }
-        else if(playerScreenPos.y - movementOffset <= 0)
+        else if(playerScreenPos.y - downMovementOffset <= 0)
         {
             if (yMovement < 0)
                 yMovement = 0;

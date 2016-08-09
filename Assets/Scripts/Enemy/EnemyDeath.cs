@@ -18,6 +18,7 @@ public class EnemyDeath : MonoBehaviour
     float volume = .25f;
 
     bool isKilledBecauseEndOfLevel = false;
+    bool isKilledBecauseOfPlayer = false;
     float damage = 5f;
     bool alreadyDead = false;
 
@@ -46,6 +47,7 @@ public class EnemyDeath : MonoBehaviour
         }
         if (col.gameObject.tag == "Player")
         {
+            isKilledBecauseOfPlayer = true;
             PlayerHealth.CurrentHealth -= damage;
             Kill(col.transform.position, false);
         }
@@ -86,7 +88,12 @@ public class EnemyDeath : MonoBehaviour
         if (!isMissile && !alreadyDead)
             PlayDeadSound();
 
-        if (!isKilledBecauseEndOfLevel && !alreadyDead)
+        if (!isKilledBecauseOfPlayer && !isKilledBecauseEndOfLevel && !alreadyDead)
+        {            
+            EventManager.TriggerEvent(EventManager.EventType.OnEnemyHealing);
+        }
+
+        if(!isKilledBecauseEndOfLevel && !alreadyDead)
         {
             alreadyDead = true;
             EventManager.TriggerEvent(EventManager.EventType.OnEnemyKilled);

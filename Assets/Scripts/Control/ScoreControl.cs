@@ -65,15 +65,15 @@ public class ScoreControl : MonoBehaviour
     void OnEnable()
     {
         EventManager.StartListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
-        EventManager.StartListening(EventManager.EventType.OnGamePaused, OnGamePaused);
-        EventManager.StartListening(EventManager.EventType.OnGameResumed, OnGameResumed);
+        EventManager.StartListening(EventManager.EventType.OnSpawnPaused, OnGamePaused);
+        EventManager.StartListening(EventManager.EventType.OnSpawnResumed, OnGameResumed);
     }
 
     void OnDisable()
     {
         EventManager.StopListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
-        EventManager.StopListening(EventManager.EventType.OnGamePaused, OnGamePaused);
-        EventManager.StopListening(EventManager.EventType.OnGameResumed, OnGameResumed);
+        EventManager.StopListening(EventManager.EventType.OnSpawnPaused, OnGamePaused);
+        EventManager.StopListening(EventManager.EventType.OnSpawnResumed, OnGameResumed);
     }
 
     void OnGamePaused()

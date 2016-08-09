@@ -91,7 +91,7 @@ public class MarketplacePanelUI : MonoBehaviour
             if (upgradesPanel.anchoredPosition.y == upgradesPanelStartingPos.y)
             {
                 finishedDissappearing = true;
-                EventManager.TriggerEvent(EventManager.EventType.OnGameResumed);
+                EventManager.TriggerEvent(EventManager.EventType.OnSpawnResumed);
             }
             yield return null;
         }

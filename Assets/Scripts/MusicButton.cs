@@ -25,15 +25,13 @@ public class MusicButton : MonoBehaviour {
     {
         musicOn.SetActive(false);
         musicOff.SetActive(true);
-        AudioSettingsControl.MusicOn = false;
-        EventManager.TriggerEvent(EventManager.EventType.OnMusicMuted);
+        AudioSettingsControl.MusicOn = false;       
     }
 
     public void MusicOffPressed()
     {
         musicOn.SetActive(true);
         musicOff.SetActive(false);
-        AudioSettingsControl.MusicOn = true;
-        EventManager.TriggerEvent(EventManager.EventType.OnMusicUnmuted);
+        AudioSettingsControl.MusicOn = true;        
     }
 }

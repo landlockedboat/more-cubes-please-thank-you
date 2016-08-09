@@ -6,7 +6,6 @@ public class BulletLogic : MonoBehaviour {
     int currentShootThroughEnemies;
     int shootThroughEnemies;
     float speed;
-    bool killFlag = false;  
 
     void Start()
     {
@@ -20,14 +19,6 @@ public class BulletLogic : MonoBehaviour {
         speed = PlayerShooting.Speed;
     }
 
-    void OnEnable() {
-        EventManager.StartListening(EventManager.EventType.OnBulletKill, Destroy);
-    }
-
-    void OnDisable()
-    {
-        EventManager.StopListening(EventManager.EventType.OnBulletKill, Destroy);
-    }
 
     void Update () {
         Move();
@@ -44,12 +35,5 @@ public class BulletLogic : MonoBehaviour {
         {
             Destroy(gameObject);
         }
-    }
-
-    void Destroy() {
-        if (killFlag)
-            Destroy(gameObject);
-        else
-            killFlag = true;
     }
 }

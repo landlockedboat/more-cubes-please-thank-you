@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AudioSettingsControl : MonoBehaviour {
+public class AudioSettingsControl : MonoBehaviour
+{
 
     static AudioSettingsControl audioSettingsControl;
     [SerializeField]
@@ -18,12 +19,14 @@ public class AudioSettingsControl : MonoBehaviour {
                 audioSettingsControl = FindObjectOfType<AudioSettingsControl>();
                 if (!audioSettingsControl)
                 {
-                    Debug.LogError("There needs to be one active AudioSettingsControl script on a GameObject in your scene.");
+                    GameObject go = new GameObject();
+                    go.name = "AudioSettingsControl";
+                    go.AddComponent<AudioSettingsControl>();
+                    audioSettingsControl = FindObjectOfType<AudioSettingsControl>();
+                    Debug.Log("AudioSettingsControl script created on a GameObject in your scene.");
+
                 }
-                else
-                {
-                    audioSettingsControl.Init();
-                }
+                audioSettingsControl.Init();
             }
 
             return audioSettingsControl;
@@ -53,11 +56,19 @@ public class AudioSettingsControl : MonoBehaviour {
         set
         {
             instance.musicOn = value;
+            if (instance.musicOn)
+            {
+                EventManager.TriggerEvent(EventManager.EventType.OnMusicUnmuted);
+            }
+            else
+            {
+                EventManager.TriggerEvent(EventManager.EventType.OnMusicMuted);
+            }
         }
     }
 
     void Init()
     {
-
+        DontDestroyOnLoad(gameObject);
     }
 }

@@ -28,13 +28,13 @@ public class StatisticsPanelUI : MonoBehaviour
     void OnEnable()
     {
         EventManager.StartListening(EventManager.EventType.OnUpgradesShown, OnUpgradesShown);
-        EventManager.StartListening(EventManager.EventType.OnGameResumed, OnGameResumed);
+        EventManager.StartListening(EventManager.EventType.OnSpawnResumed, OnGameResumed);
     }
 
     void OnDisable()
     {
         EventManager.StopListening(EventManager.EventType.OnUpgradesShown, OnUpgradesShown);
-        EventManager.StopListening(EventManager.EventType.OnGameResumed, OnGameResumed);
+        EventManager.StopListening(EventManager.EventType.OnSpawnResumed, OnGameResumed);
     }
 
     void OnGameResumed() {        

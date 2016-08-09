@@ -2,9 +2,7 @@
 using System.Collections;
 
 public class OptimisationControl : MonoBehaviour {
-    [SerializeField]
-    float bulletLifespan = 2f;
-    float currentTimeToKillBullets;
+
     [SerializeField]
     int maxParticlesInScene = 600;
 
@@ -63,20 +61,8 @@ public class OptimisationControl : MonoBehaviour {
         1 - (float)instance.currentParticlesInscene / (float)instance.maxParticlesInScene;
         return ret;
     }
-
-    // Use this for initialization
-    void Start () {
-        currentTimeToKillBullets = bulletLifespan;
-    }
-	
-	// Update is called once per frame
+    	
 	void Update () {
-	    if(currentTimeToKillBullets <= 0)
-        {
-            currentTimeToKillBullets = bulletLifespan;
-            EventManager.TriggerEvent(EventManager.EventType.OnBulletKill);
-        }
         EventManager.TriggerEvent(EventManager.EventType.OnParticleClock);
-        currentTimeToKillBullets -= Time.deltaTime;
 	}
 }

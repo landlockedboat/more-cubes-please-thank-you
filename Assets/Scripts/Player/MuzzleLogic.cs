@@ -11,6 +11,10 @@ public class MuzzleLogic : MonoBehaviour {
     GameObject missilePrefab;
     [SerializeField]
     GameObject muzzlePrefab;
+    [SerializeField]
+    SimpleAnimation simpleAnim;
+    [SerializeField]
+    FadeLight fadeLightFX;
 
     [Header("Multishot")]
     [SerializeField]
@@ -93,6 +97,8 @@ public class MuzzleLogic : MonoBehaviour {
         audioSource.pitch = pitch;
         if(AudioSettingsControl.AudioOn)
             audioSource.PlayOneShot(bulletShootingSound, vol);
+        simpleAnim.StartAnimation();
+        fadeLightFX.StartAnimation();
     }
 
     public void ShootMissile()

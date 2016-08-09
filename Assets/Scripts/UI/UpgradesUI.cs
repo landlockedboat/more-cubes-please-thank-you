@@ -83,7 +83,7 @@ public class UpgradesUI : MonoBehaviour
                 chosenOnes[i] = pick;
                 instance.instancedUpgrades[i] = Instantiate(instance.upgradesRoulette[pick],
                     new Vector3(
-                        (i * instance.spaceBetweenUpgrades) - (((instance.upgradesShown / 2)) * (instance.spaceBetweenUpgrades/2)),
+                        (i * (float)instance.spaceBetweenUpgrades) - ((((float)instance.upgradesShown - 1)) * ((float)instance.spaceBetweenUpgrades / 2)),
                         0, 0),
                     Quaternion.identity) as GameObject;
                 instance.instancedUpgrades[i].transform.SetParent(instance.transform, false);

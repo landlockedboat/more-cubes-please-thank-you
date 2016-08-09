@@ -95,6 +95,7 @@ public class TutorialControl: MonoBehaviour {
             case TutState.MissilesTut:
                 if (Input.GetMouseButtonDown(1))
                 {
+                    tutState = TutState.Congrats;
                     UpdateText(congratsText);
                     StartCoroutine("Countdown");
                 }

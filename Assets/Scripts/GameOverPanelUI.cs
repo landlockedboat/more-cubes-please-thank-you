@@ -43,7 +43,8 @@ public class GameOverPanelUI : MonoBehaviour {
 
     void OnGameOver()
     {
-        instance.transform.GetChild(0).gameObject.SetActive(true);
+        foreach (Transform child in instance.transform)
+            child.gameObject.SetActive(true);
     }
 
     public void Retry()

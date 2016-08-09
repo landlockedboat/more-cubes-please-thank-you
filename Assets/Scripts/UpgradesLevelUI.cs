@@ -24,7 +24,7 @@ public class UpgradesLevelUI : MonoBehaviour {
         string text = "";
         foreach(UpgradeControl.UpgradeType ut in Enum.GetValues(typeof(UpgradeControl.UpgradeType)))
         {
-            text += EnumParser.ParseAbbreviation(ut) + ": " + UpgradeControl.GetLevel(ut) + "\n";
+            text += "x" + UpgradeControl.GetLevel(ut) + "\n";
         }
         upgradesLevelsText.text = text;
     }

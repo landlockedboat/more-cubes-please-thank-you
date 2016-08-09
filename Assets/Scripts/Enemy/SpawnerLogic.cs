@@ -70,7 +70,7 @@ public class SpawnerLogic : MonoBehaviour {
                     }
                     enemy.GetComponent<EnemyDeath>().Init(damage);
                     enemy.transform.GetChild(0).GetComponent<EnemyGeomLogic>().Init(color);
-                    enemy.GetComponent<EnemyMovement>().Init(speed);
+                    enemy.GetComponent<EnemySimpleMovement>().Init(speed);
                     ++enemiesSpawned;
                     finishedSpawning = enemiesSpawned == enemiesToSpawn;
                 }
@@ -113,14 +113,14 @@ public class SpawnerLogic : MonoBehaviour {
     void OnEnable() {
         EventManager.StartListening(EventManager.EventType.OnLevelChanged, Destroy);
         EventManager.StartListening(EventManager.EventType.OnGameOver, Destroy);
-        EventManager.StartListening(EventManager.EventType.OnGamePaused, OnGamePaused);
-        EventManager.StartListening(EventManager.EventType.OnGameResumed, OnGameResumed);
+        EventManager.StartListening(EventManager.EventType.OnSpawnPaused, OnGamePaused);
+        EventManager.StartListening(EventManager.EventType.OnSpawnResumed, OnGameResumed);
     }
 
     void OnDisable() {
         EventManager.StopListening(EventManager.EventType.OnLevelChanged, Destroy);
-        EventManager.StopListening(EventManager.EventType.OnGamePaused, OnGamePaused);
-        EventManager.StopListening(EventManager.EventType.OnGameResumed, OnGameResumed);
+        EventManager.StopListening(EventManager.EventType.OnSpawnPaused, OnGamePaused);
+        EventManager.StopListening(EventManager.EventType.OnSpawnResumed, OnGameResumed);
     }
 
     void OnGamePaused()

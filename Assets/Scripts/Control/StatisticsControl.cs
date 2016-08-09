@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class StatisticsControl : MonoBehaviour {
+public class StatisticsControl : MonoBehaviour
+{
 
     Dictionary<Stat, int> stats;
 
@@ -15,13 +16,15 @@ public class StatisticsControl : MonoBehaviour {
             {
                 statisticsControl = FindObjectOfType<StatisticsControl>();
                 if (!statisticsControl)
-                {
-                    Debug.LogError("There needs to be one active StatisticsControl script on a GameObject in your scene.");
+                {                    
+                    GameObject go = new GameObject();
+                    go.name = "AudioSettingsControl";
+                    go.AddComponent<StatisticsControl>();
+                    statisticsControl = FindObjectOfType<StatisticsControl>();
+                    Debug.Log("StatisticsControl script created on a GameObject in your scene.");
                 }
-                else
-                {
-                    statisticsControl.Init();
-                }
+                statisticsControl.Init();
+
             }
 
             return statisticsControl;
@@ -31,6 +34,7 @@ public class StatisticsControl : MonoBehaviour {
     void Init()
     {
         stats = new Dictionary<Stat, int>();
+        DontDestroyOnLoad(gameObject);
     }
 
     public static void SetStat(Stat s, int value)
@@ -41,7 +45,8 @@ public class StatisticsControl : MonoBehaviour {
             instance.stats.Add(s, value);
     }
 
-    public static int GetStat(Stat s) {
+    public static int GetStat(Stat s)
+    {
         int val = -1;
         instance.stats.TryGetValue(s, out val);
         return val;
