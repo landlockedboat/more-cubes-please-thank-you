@@ -176,7 +176,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &88289059
 RectTransform:
   m_ObjectHideFlags: 0
@@ -752,7 +752,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &558250337
 RectTransform:
   m_ObjectHideFlags: 0
@@ -820,7 +820,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Score: 2000POINTS'
+  m_Text: 22323
 --- !u!222 &558250340
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1152,7 +1152,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &864566709
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2151,9 +2151,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a71368cdb4f2b24478060d2a0bab89cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  growSpeed: 0.5
-  maxHeight: 40
-  growDelta: 1
+  growSpeed: 0.25
+  maxHeight: 30
+  growDelta: 0.5
 --- !u!114 &1192185522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2179,7 +2179,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c84d83de926e6374ea3cd9a9441310a2, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 00de5eee90368ca4fa0152846cc775f1, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2270,7 +2270,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1206653811
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2371,7 +2371,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1225682136
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2438,7 +2438,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1244400231
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2898,7 +2898,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1391875038
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3862,7 +3862,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1675738915
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4405,7 +4405,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1920222562
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4669,7 +4669,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2008569377
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4845,7 +4845,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2097395155
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4998,7 +4998,7 @@ MonoBehaviour:
   baseEnemiesToSpawn: 5
   spawnerEnemiesToSpawnTimesTheLevel: 0
   baseSpawnerEnemiesToSpawn: 5
-  baseEnemyDamage: 5
+  baseEnemyDamage: 2.5
   baseEnemySpeed: 6
   enemyDamageIncrease: 0.01
   enemySpeedIncrease: 0.05
@@ -5008,7 +5008,8 @@ MonoBehaviour:
   speedDecreasePercentage: 0.5
   spawnOffset: 1
   spawnerPrefab: {fileID: 151594, guid: 0f30b81721b3b16468f3c3f6c1f7bbc9, type: 2}
-  timeBetweenSpawners: 0.5
+  timeBetweenSpawners: 1
+  timeBetweenSpawnersDecreasePercentage: 0.05
   levelsUntilUpgrade: 5
   playerPrefab: {fileID: 125800, guid: a78bd1826e3f5d24e9fdc4157662e2c3, type: 2}
 --- !u!114 &2139860367
@@ -5037,9 +5038,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeBetweenSpawns: 1
-  timeToBeginSpawning: 0.25
+  timeToBeginSpawning: 1
   fadeSpeed: 2
   enemyGrowingSpeed: 3
+  timeToBeginSpawningDecreasePercentage: 0.05
+  timeBetweenSpawnsDecreasePercentage: 0.05
 --- !u!1 &2145203127
 GameObject:
   m_ObjectHideFlags: 0

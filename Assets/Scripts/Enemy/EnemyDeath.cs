@@ -77,6 +77,7 @@ public class EnemyDeath : MonoBehaviour
                             SimplePool.Spawn(enemyFragmentPrefab,
                             transform.position + new Vector3(i * .5f, j * .5f, k * .5f),
                             transform.localRotation);
+                        point.transform.localScale = 0.4f * transform.localScale;
                         point.GetComponent<EnemyParticleLogic>().StartExplosion(explosionPos, isMissile);
                         point.GetComponent<MeshRenderer>().material.color = thisColor;
                     }

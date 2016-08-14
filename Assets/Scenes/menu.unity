@@ -283,6 +283,7 @@ GameObject:
   - 222: {fileID: 296367857}
   - 114: {fileID: 296367856}
   - 114: {fileID: 296367855}
+  - 114: {fileID: 296367858}
   m_Layer: 5
   m_Name: SkipTutorialButton
   m_TagString: Untagged
@@ -331,7 +332,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.128}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -344,7 +345,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 296367856}
+  m_TargetGraphic: {fileID: 302344613}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -394,6 +395,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 296367853}
+--- !u!114 &296367858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 296367853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0afa0958ccf0cdc4a94a62e452c465af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &302344611
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,6 +715,7 @@ GameObject:
   - 222: {fileID: 402608688}
   - 114: {fileID: 402608687}
   - 114: {fileID: 402608686}
+  - 114: {fileID: 402608689}
   m_Layer: 5
   m_Name: MusicOn
   m_TagString: Untagged
@@ -817,6 +830,23 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 402608684}
+--- !u!114 &402608689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 402608684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9c1d34d340428a43b368b974bff354f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToStart: 0
+  duration: 1
+  executeOnEnable: 1
+  startingAlpha: 0
+  finalAlpha: 1
+  startingImageColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &490463512
 GameObject:
   m_ObjectHideFlags: 0
@@ -939,6 +969,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 617927820}
   - 114: {fileID: 617927821}
+  - 222: {fileID: 617927824}
   m_Layer: 5
   m_Name: Music
   m_TagString: Untagged
@@ -979,6 +1010,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17b21a5ea157a0b439de45f60d2cfddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!222 &617927824
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 617927819}
 --- !u!1 &714973598
 GameObject:
   m_ObjectHideFlags: 0
@@ -1460,6 +1497,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 1064296621}
   - 114: {fileID: 1064296622}
+  - 222: {fileID: 1064296625}
   m_Layer: 5
   m_Name: Audio
   m_TagString: Untagged
@@ -1500,6 +1538,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0602394b44ecdd408535658abaf3599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!222 &1064296625
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1064296620}
 --- !u!1 &1101717407
 GameObject:
   m_ObjectHideFlags: 0
@@ -2044,6 +2088,7 @@ GameObject:
   - 222: {fileID: 1727704152}
   - 114: {fileID: 1727704151}
   - 114: {fileID: 1727704150}
+  - 114: {fileID: 1727704153}
   m_Layer: 5
   m_Name: AudioOn
   m_TagString: Untagged
@@ -2158,6 +2203,23 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1727704148}
+--- !u!114 &1727704153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1727704148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9c1d34d340428a43b368b974bff354f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToStart: 0
+  duration: 1
+  executeOnEnable: 1
+  startingAlpha: 0
+  finalAlpha: 1
+  startingImageColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &1767454608
 GameObject:
   m_ObjectHideFlags: 0

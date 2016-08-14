@@ -11,6 +11,11 @@ public class SpawnerControl : MonoBehaviour {
     [SerializeField]
     float enemyGrowingSpeed = 6f;
     int enemiesToSpawn;
+    [Header("On level changed stuff")]
+    [SerializeField]
+    float timeToBeginSpawningDecreasePercentage = .05f;
+    [SerializeField]
+    float timeBetweenSpawnsDecreasePercentage = .05f;
 
     bool bigEnemies = false;
     bool smallEnemies = false;
@@ -42,6 +47,22 @@ public class SpawnerControl : MonoBehaviour {
     void Init()
     {
 
+    }
+
+    void OnEnable()
+    {
+        EventManager.StartListening(EventManager.EventType.OnLevelChanged, OnLevelChanged);
+    }
+
+    void OnDisable()
+    {
+        EventManager.StopListening(EventManager.EventType.OnLevelChanged, OnLevelChanged);
+    }
+
+    void OnLevelChanged()
+    {
+        timeToBeginSpawning *= 1 - timeToBeginSpawningDecreasePercentage;
+        timeBetweenSpawns *= 1 - timeBetweenSpawnsDecreasePercentage;
     }
 
 

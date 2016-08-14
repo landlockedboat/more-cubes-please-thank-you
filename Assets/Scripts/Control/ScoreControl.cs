@@ -67,6 +67,8 @@ public class ScoreControl : MonoBehaviour
         EventManager.StartListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
         EventManager.StartListening(EventManager.EventType.OnSpawnPaused, OnGamePaused);
         EventManager.StartListening(EventManager.EventType.OnSpawnResumed, OnGameResumed);
+        EventManager.StartListening(EventManager.EventType.OnGamePaused, OnGamePaused);
+        EventManager.StartListening(EventManager.EventType.OnGameResumed, OnGameResumed);
     }
 
     void OnDisable()
@@ -74,6 +76,8 @@ public class ScoreControl : MonoBehaviour
         EventManager.StopListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
         EventManager.StopListening(EventManager.EventType.OnSpawnPaused, OnGamePaused);
         EventManager.StopListening(EventManager.EventType.OnSpawnResumed, OnGameResumed);
+        EventManager.StopListening(EventManager.EventType.OnGamePaused, OnGamePaused);
+        EventManager.StopListening(EventManager.EventType.OnGameResumed, OnGameResumed);
     }
 
     void OnGamePaused()

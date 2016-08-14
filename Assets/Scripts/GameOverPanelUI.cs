@@ -43,6 +43,7 @@ public class GameOverPanelUI : MonoBehaviour {
 
     void OnGameOver()
     {
+        PlayerPrefs.SetInt("IS_FIRST_TIME_PLAYING", 0);
         foreach (Transform child in instance.transform)
             child.gameObject.SetActive(true);
     }

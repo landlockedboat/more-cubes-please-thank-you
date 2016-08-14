@@ -3,27 +3,55 @@ using System.Collections;
 
 public class UpgradeButton : MonoBehaviour {
 
+    bool alreadyChosen = false;
+
+    void OnEnable()
+    {
+        alreadyChosen = false;
+    }
+
     public void MoreLifeUpgrade()
     {
-        UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.MoreLifeUpgrade);
+        if (!alreadyChosen)
+        {
+            UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.MoreLifeUpgrade);
+            alreadyChosen = true;
+        }
     }
 
     public void MoreMissilesUpgrade()
     {
-        UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.MoreMissilesUpgrade);
+        if (!alreadyChosen)
+        {
+            UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.MoreMissilesUpgrade);
+            alreadyChosen = true;
+        }
     }
 
     public void ShootThroughUpgrade()
     {
-        UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.ShootThroughUpgrade);
+        if (!alreadyChosen)
+        {
+            UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.ShootThroughUpgrade);
+            alreadyChosen = true;
+        }
     }
 
     public void MoreBulletsUpgrade()
     {
-        UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.MoreBulletsUpgrade);
+        if (!alreadyChosen)
+        {
+            UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.MoreBulletsUpgrade);
+            alreadyChosen = true;
+        }
     }
 
-    public void MultishotUpgrade() {
-        UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.MultishotUpgrade);
+    public void MultishotUpgrade()
+    {
+        if (!alreadyChosen)
+        {
+            UpgradeControl.UpgradeChosen(UpgradeControl.UpgradeType.MultishotUpgrade);
+            alreadyChosen = true;
+        }
     }
 }

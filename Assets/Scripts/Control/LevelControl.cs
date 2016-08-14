@@ -58,7 +58,7 @@ public class LevelControl : MonoBehaviour {
     float levelEnemyMaximumDamage;
     float levelEnemyMaximumSpeed;
 
-    [Space(10)]
+    [Header("Spawners stuff")]
     [SerializeField]
     float spawnOffset = 1f;
 
@@ -67,11 +67,14 @@ public class LevelControl : MonoBehaviour {
     GameObject spawnerPrefab;
     [SerializeField]
     float timeBetweenSpawners = 1f;
+    [SerializeField]
+    float timeBetweenSpawnersDecreasePercentage = 0.05f;
 
     [SerializeField]
     int levelsUntilUpgrade = 5;
 
     bool isGamePaused = false;
+    bool isGameOver = false;
 
     [SerializeField]
     GameObject playerPrefab;
@@ -179,11 +182,25 @@ public class LevelControl : MonoBehaviour {
         }
     }
 
+    public static bool IsGameOver
+    {
+        get
+        {
+            return instance.isGameOver;
+        }
+
+        set
+        {
+            instance.isGameOver = value;
+        }
+    }
+
     void OnEnable()
     {
         EventManager.StartListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
         EventManager.StartListening(EventManager.EventType.OnSpawnPaused, OnGamePaused);
         EventManager.StartListening(EventManager.EventType.OnSpawnResumed, OnGameResumed);
+        EventManager.StartListening(EventManager.EventType.OnGameOver, OnGameOver);
     }
 
     void OnDisable()
@@ -191,6 +208,13 @@ public class LevelControl : MonoBehaviour {
         EventManager.StopListening(EventManager.EventType.OnEnemyKilled, OnEnemyKilled);
         EventManager.StopListening(EventManager.EventType.OnSpawnPaused, OnGamePaused);
         EventManager.StopListening(EventManager.EventType.OnSpawnResumed, OnGameResumed);
+        EventManager.StartListening(EventManager.EventType.OnGameOver, OnGameOver);
+    }
+
+    void OnGameOver()
+    {
+        isGameOver = true;
+
     }
 
     void OnGamePaused()
@@ -290,8 +314,7 @@ public class LevelControl : MonoBehaviour {
         instance.levelEnemiesKilled = 0;
         CalculateDamages();
         finishedSpawning = false;
-
-        SpawnerControl.TimeBetweenSpawns *= .95f;
+        timeBetweenSpawners *= 1 - timeBetweenSpawnersDecreasePercentage;
 
         if (currentLevel % levelsUntilUpgrade == 0)
         {            
